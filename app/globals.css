@@ -3,9 +3,9 @@
 @tailwind utilities;
 
 :root {
-  --bg-primary: #050508;
-  --bg-secondary: #0c0a14;
-  --bg-gradient: linear-gradient(180deg, #050508 0%, #0a0818 25%, #080a14 50%, #050810 75%, #060512 100%);
+  --bg-primary: #0d0a14;
+  --bg-secondary: #120d1a;
+  --bg-gradient: linear-gradient(180deg, #0d0a14 0%, #15101f 25%, #120d1c 50%, #0e0a18 75%, #13101d 100%);
   --text-primary: #f1f5f9;
   --text-secondary: #cbd5e1;
   --accent-primary: #8b5cf6;

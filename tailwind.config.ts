@@ -28,7 +28,7 @@ const config: Config = {
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-web3': 'linear-gradient(135deg, #8b5cf6 0%, #6366f1 50%, #3b82f6 100%)',
-        'gradient-mesh': 'radial-gradient(at 40% 20%, hsla(263,83%,58%,0.12) 0px, transparent 50%), radial-gradient(at 80% 0%, hsla(239,84%,67%,0.1) 0px, transparent 50%), radial-gradient(at 0% 50%, hsla(217,91%,60%,0.08) 0px, transparent 50%)',
+        'gradient-mesh': 'radial-gradient(at 40% 20%, hsla(263,83%,58%,0.18) 0px, transparent 50%), radial-gradient(at 80% 0%, hsla(239,84%,67%,0.15) 0px, transparent 50%), radial-gradient(at 0% 50%, hsla(263,70%,55%,0.12) 0px, transparent 50%)',
       },
       boxShadow: {
         neon: '0 0 20px rgba(139, 92, 246, 0.35)',

@@ -12,13 +12,14 @@ export function Header() {
 
   const navLinks = [
     { href: '/news', label: 'Новости' },
+    { href: '/articles', label: 'Статьи' },
     { href: '/members', label: 'Участники' },
     { href: '/games', label: 'Игры' },
     { href: '/about', label: 'Об EVEDEX' },
   ]
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-[var(--bg-primary)]/80 backdrop-blur-xl">
+    <header className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-transparent backdrop-blur-md">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
         <Link href="/" className="flex items-center gap-2">
           <div className="h-9 w-9 rounded-lg bg-gradient-to-br from-evedex-primary to-evedex-accent flex items-center justify-center font-bold text-white text-sm shadow-neon">

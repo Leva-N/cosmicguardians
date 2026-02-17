@@ -4,6 +4,7 @@ import './globals.css'
 import { ThemeProvider } from '@/components/ThemeProvider'
 import { AuthProvider } from '@/components/AuthProvider'
 import { Header } from '@/components/Header'
+import { Footer } from '@/components/Footer'
 
 const spaceGrotesk = Space_Grotesk({
   variable: '--font-space',
@@ -27,11 +28,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ru" suppressHydrationWarning>
-      <body className={`${spaceGrotesk.variable} ${outfit.variable} antialiased`}>
+      <body className={`${spaceGrotesk.variable} ${outfit.variable} antialiased min-h-screen flex flex-col`}>
         <ThemeProvider>
           <AuthProvider>
             <Header />
-            <main className="pt-[72px]">{children}</main>
+            <main className="pt-[72px] flex-1 flex flex-col">{children}</main>
+            <Footer />
           </AuthProvider>
         </ThemeProvider>
       </body>

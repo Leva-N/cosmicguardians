@@ -1,5 +1,4 @@
 import { News } from '@/components/News'
-import { Footer } from '@/components/Footer'
 
 export const metadata = {
   title: 'Новости — Cosmic Guardians',
@@ -10,7 +9,6 @@ export default function NewsPage() {
   return (
     <>
       <News />
-      <Footer />
     </>
   )
 }

@@ -33,3 +33,6 @@ Thumbs.db
 
 # Vercel
 .vercel
+
+# User-generated news (stored in data/news.json)
+data/news.json

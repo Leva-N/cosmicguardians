@@ -1,5 +1,4 @@
 import Link from 'next/link'
-import { Footer } from '@/components/Footer'
 
 const games = [
   {
@@ -73,7 +72,6 @@ export default function GamesPage() {
           </div>
         </div>
       </section>
-      <Footer />
     </>
   )
 }

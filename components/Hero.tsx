@@ -32,12 +32,6 @@ export function Hero() {
           >
             Присоединиться
           </a>
-          <a
-            href="/about#stats"
-            className="inline-flex items-center rounded-xl border border-white/10 bg-white/5 px-6 py-3 font-semibold text-[var(--text-primary)] transition-all hover:border-evedex-primary/50 hover:bg-evedex-primary/10"
-          >
-            Смотреть статистику
-          </a>
         </div>
       </div>
     </section>
