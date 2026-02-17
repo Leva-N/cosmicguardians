@@ -1,7 +1,5 @@
 'use client'
 
-import { motion } from 'framer-motion'
-
 const members = [
   { name: 'Volunteer_01', role: 'Core Dev', contributions: 156, avatar: 'V' },
   { name: 'Doc_Master', role: 'Documentation', contributions: 89, avatar: 'D' },
@@ -15,29 +13,21 @@ export function Members() {
   return (
     <section id="members" className="relative py-24">
       <div className="mx-auto max-w-7xl px-6">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="mb-12 text-center"
-        >
+        <div className="mb-12 text-center animate-in">
           <h2 className="mb-4 text-3xl font-bold md:text-4xl">
             <span className="gradient-text">Участники и вклад</span>
           </h2>
           <p className="mx-auto max-w-2xl text-[var(--text-secondary)]">
             Люди, которые делают EVEDEX живой и развивающейся платформой
           </p>
-        </motion.div>
+        </div>
 
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {members.map((member, i) => (
-            <motion.div
+            <div
               key={member.name}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.05 }}
-              className="glass-card group rounded-2xl p-6 flex flex-col items-center text-center"
+              className="glass-card group rounded-2xl p-6 flex flex-col items-center text-center animate-in"
+              style={{ animationDelay: `${i * 0.05}s` }}
             >
               <div className="mb-4 h-16 w-16 rounded-full bg-gradient-to-br from-evedex-primary to-evedex-accent flex items-center justify-center text-2xl font-bold text-white shadow-neon group-hover:scale-105 transition-transform">
                 {member.avatar}
@@ -48,7 +38,7 @@ export function Members() {
                 <span className="text-2xl font-bold text-evedex-achievement">{member.contributions}</span>
                 <span className="ml-2 text-sm text-[var(--text-secondary)]">вкладов</span>
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>

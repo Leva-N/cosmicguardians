@@ -2,7 +2,6 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { motion, AnimatePresence } from 'framer-motion'
 import { useTheme } from './ThemeProvider'
 import { useAuth } from './AuthProvider'
 
@@ -112,14 +111,8 @@ export function Header() {
         </div>
       </div>
 
-      <AnimatePresence>
-        {mobileOpen && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            className="md:hidden border-t border-white/5 bg-[var(--bg-secondary)]"
-          >
+      {mobileOpen && (
+          <div className="md:hidden border-t border-white/5 bg-[var(--bg-secondary)] animate-in">
             <nav className="flex flex-col gap-1 px-6 py-4">
               {navLinks.map((link) => (
                 <Link
@@ -163,9 +156,8 @@ export function Header() {
                 </div>
               )}
             </nav>
-          </motion.div>
+          </div>
         )}
-      </AnimatePresence>
     </header>
   )
 }

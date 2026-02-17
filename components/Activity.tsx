@@ -1,6 +1,5 @@
 'use client'
 
-import { motion } from 'framer-motion'
 import { useState } from 'react'
 
 const activities = [
@@ -25,12 +24,7 @@ export function Activity() {
   return (
     <section id="activity" className="relative py-24">
       <div className="mx-auto max-w-7xl px-6">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="mb-12 flex flex-col md:flex-row md:items-end md:justify-between gap-6"
-        >
+        <div className="mb-12 flex flex-col md:flex-row md:items-end md:justify-between gap-6 animate-in">
           <div>
             <h2 className="mb-2 text-3xl font-bold md:text-4xl">
               <span className="gradient-text">Активность сообщества</span>
@@ -54,23 +48,15 @@ export function Activity() {
               </button>
             ))}
           </div>
-        </motion.div>
+        </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="glass-card rounded-2xl overflow-hidden"
-        >
+        <div className="glass-card rounded-2xl overflow-hidden animate-in animate-in-delay-1">
           <div className="divide-y divide-white/5">
             {recentActivity
               .filter((a) => !filter || a.type === filter)
               .map((item, i) => (
-                <motion.div
+                <div
                   key={`${item.user}-${i}`}
-                  initial={{ opacity: 0, x: -10 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
                   className="flex items-center justify-between gap-4 px-6 py-4 hover:bg-white/5 transition-colors"
                 >
                   <div className="flex items-center gap-4">
@@ -89,10 +75,10 @@ export function Activity() {
                   <span className="rounded-md bg-white/5 px-2 py-1 text-xs text-[var(--text-secondary)]">
                     {activities.find((x) => x.id === item.type)?.label ?? item.type}
                   </span>
-                </motion.div>
+                </div>
               ))}
           </div>
-        </motion.div>
+        </div>
       </div>
     </section>
   )
