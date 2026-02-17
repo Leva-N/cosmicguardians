@@ -21,11 +21,21 @@ npm run dev
 4. В настройках приложения → OAuth2 → Redirects добавьте:  
    `http://localhost:3000/api/auth/discord/callback`
 
+## Деплой на Vercel
+
+1. Подключите репозиторий на [vercel.com](https://vercel.com)
+2. Добавьте переменные окружения в настройках проекта:
+   - `DISCORD_CLIENT_ID`
+   - `DISCORD_CLIENT_SECRET`
+   - `NEXT_PUBLIC_APP_URL` = `https://ваш-домен.vercel.app`
+3. В Discord Developer Portal добавьте Redirect URI:  
+   `https://ваш-домен.vercel.app/api/auth/discord/callback`
+
 ## Стек
 
 - **Next.js 14** — React-фреймворк
 - **Tailwind CSS** — стилизация
-- **Framer Motion** — анимации
+- **CSS-анимации** — плавные переходы
 - **TypeScript** — типизация
 
 ## Структура
