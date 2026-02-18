@@ -53,7 +53,7 @@ export function Members() {
           {members.map((member, i) => (
             <div
               key={member.name}
-              className="glass-card group rounded-2xl p-4 sm:p-5 md:p-6 flex flex-col items-center text-center animate-in"
+              className="glass-card glass-card-purple group rounded-2xl p-4 sm:p-5 md:p-6 flex flex-col items-center text-center animate-in backdrop-blur-xl"
               style={{ animationDelay: `${i * 0.05}s` }}
             >
               <div className="mb-4 h-16 w-16 rounded-full bg-gradient-to-br from-evedex-primary to-evedex-accent flex items-center justify-center text-2xl font-bold text-white shadow-neon group-hover:scale-105 transition-transform">

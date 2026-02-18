@@ -27,14 +27,15 @@ async function saveCards(cards: HorizonCard[]): Promise<void> {
   await writeFile(HORIZON_FILE, JSON.stringify(cards, null, 2), 'utf-8')
 }
 
-function getUserFromRequest(request: NextRequest): { id: string; username: string; avatar: string | null; discriminator: string } | null {
+function getUserFromRequest(request: NextRequest): { id: string; nickname: string; avatar: string | null; discriminator: string } | null {
   const discordUser = request.cookies.get('discord_user')?.value
   if (!discordUser) return null
   try {
     const user = JSON.parse(discordUser)
+    const nickname = user.global_name || user.username || 'Anonymous'
     return {
       id: user.id || '',
-      username: user.global_name || user.username || 'Anonymous',
+      nickname,
       avatar: user.avatar || null,
       discriminator: user.discriminator || '0',
     }
@@ -43,10 +44,13 @@ function getUserFromRequest(request: NextRequest): { id: string; username: strin
   }
 }
 
+const MAX_STARS = 5000
+
 export async function GET() {
   try {
     const cards = await loadCards()
-    return NextResponse.json({ cards: cards.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()) })
+    const sorted = cards.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+    return NextResponse.json({ cards: sorted.slice(0, MAX_STARS) })
   } catch (error) {
     console.error('Horizon GET error:', error)
     return NextResponse.json({ cards: [] })
@@ -61,6 +65,9 @@ export async function POST(request: NextRequest) {
 
   try {
     const cards = await loadCards()
+    if (cards.length >= MAX_STARS) {
+      return NextResponse.json({ error: 'Стена достигла максимального количества звёзд (5000).' }, { status: 400 })
+    }
     const existingIndex = cards.findIndex((c) => c.userId === user.id)
     if (existingIndex !== -1) {
       return NextResponse.json({ error: 'Вы уже опубликовали свою карточку. Каждый пользователь может оставить карточку только один раз.' }, { status: 400 })
@@ -73,7 +80,7 @@ export async function POST(request: NextRequest) {
     const card: HorizonCard = {
       id: crypto.randomUUID(),
       userId: user.id,
-      nickname: user.username,
+      nickname: user.nickname,
       avatar: avatarUrl,
       createdAt: new Date().toISOString(),
     }

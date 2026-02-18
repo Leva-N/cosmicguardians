@@ -38,7 +38,7 @@ export function createAlienInvaders(
       ctx.fillRect(a.x - 12, a.y - 8, 24, 16)
       if (a.y + 8 > h - 70) onGameOver()
     })
-    ctx.fillStyle = '#818cf8'
+    ctx.fillStyle = '#8A2BE2'
     ctx.fillRect(ship.x, h - 60, 40, 20)
     if (aliens.length === 0) { score += 500; onScore(score); onGameOver() }
     anim = requestAnimationFrame(loop)

@@ -7,7 +7,7 @@ import { useLocale } from './LocaleProvider'
 export function Footer() {
   const { t } = useLocale()
   return (
-    <footer className="relative border-t border-white/[0.04] bg-transparent mt-auto">
+    <footer className="relative border-t border-[#8A2BE2]/30 bg-transparent backdrop-blur-md mt-auto">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 py-2 pb-[max(0.5rem,env(safe-area-inset-bottom))]">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
           <Link href="/" className="flex items-center gap-1.5 w-fit">

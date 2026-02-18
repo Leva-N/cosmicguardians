@@ -11,9 +11,9 @@ const config: Config = {
     extend: {
       colors: {
         evedex: {
-          primary: '#8b5cf6',
-          secondary: '#6366f1',
-          accent: '#3b82f6',
+          primary: '#8A2BE2',
+          secondary: '#8A2BE2',
+          accent: '#8A2BE2',
           dark: '#050508',
           card: 'rgba(255,255,255,0.03)',
           'card-hover': 'rgba(255,255,255,0.06)',
@@ -27,14 +27,14 @@ const config: Config = {
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-        'gradient-web3': 'linear-gradient(135deg, #8b5cf6 0%, #6366f1 50%, #3b82f6 100%)',
-        'gradient-mesh': 'radial-gradient(at 40% 20%, hsla(263,83%,58%,0.18) 0px, transparent 50%), radial-gradient(at 80% 0%, hsla(239,84%,67%,0.15) 0px, transparent 50%), radial-gradient(at 0% 50%, hsla(263,70%,55%,0.12) 0px, transparent 50%)',
+        'gradient-web3': 'linear-gradient(135deg, #8A2BE2 0%, #9B4DE8 50%, #8A2BE2 100%)',
+        'gradient-mesh': 'radial-gradient(at 40% 20%, hsla(271,76%,53%,0.18) 0px, transparent 50%), radial-gradient(at 80% 0%, hsla(271,76%,53%,0.15) 0px, transparent 50%), radial-gradient(at 0% 50%, hsla(271,76%,53%,0.12) 0px, transparent 50%)',
       },
       boxShadow: {
-        neon: '0 0 20px rgba(139, 92, 246, 0.35)',
-        'neon-purple': '0 0 20px rgba(139, 92, 246, 0.4)',
-        'neon-blue': '0 0 20px rgba(59, 130, 246, 0.35)',
-        glow: '0 0 40px rgba(99, 102, 241, 0.2)',
+        neon: '0 0 20px rgba(138, 43, 226, 0.35)',
+        'neon-purple': '0 0 20px rgba(138, 43, 226, 0.4)',
+        'neon-blue': '0 0 20px rgba(138, 43, 226, 0.35)',
+        glow: '0 0 40px rgba(138, 43, 226, 0.2)',
       },
       animation: {
         'float': 'float 6s ease-in-out infinite',
@@ -47,8 +47,8 @@ const config: Config = {
           '50%': { transform: 'translateY(-10px)' },
         },
         'pulse-glow': {
-          '0%, 100%': { opacity: '1', boxShadow: '0 0 20px rgba(139, 92, 246, 0.35)' },
-          '50%': { opacity: '0.8', boxShadow: '0 0 40px rgba(99, 102, 241, 0.5)' },
+          '0%, 100%': { opacity: '1', boxShadow: '0 0 20px rgba(138, 43, 226, 0.35)' },
+          '50%': { opacity: '0.8', boxShadow: '0 0 40px rgba(138, 43, 226, 0.5)' },
         },
         gradient: {
           '0%, 100%': { backgroundPosition: '0% 50%' },

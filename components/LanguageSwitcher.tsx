@@ -23,7 +23,7 @@ export function LanguageSwitcher() {
       <button
         type="button"
         onClick={() => setOpen(!open)}
-        className="flex items-center gap-1.5 rounded-lg px-3 py-2.5 min-h-[40px] text-sm text-[var(--text-secondary)] hover:text-[#8A2BE2] hover:bg-white/5 hover:border-transparent transition-all border border-white/10 outline-none focus:outline-none focus:ring-0"
+        className="flex items-center gap-1.5 rounded-lg px-3 py-2.5 min-h-[40px] text-sm text-[var(--text-secondary)] hover:text-[#8A2BE2] hover:bg-white/5 transition-all border-0 shadow-none outline-none focus:outline-none focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0"
         aria-label="Language"
         aria-expanded={open}
       >

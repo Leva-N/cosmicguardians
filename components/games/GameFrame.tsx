@@ -28,7 +28,7 @@ export function GameFrame({ gameId, gameName, children }: Props) {
         </p>
         <Link
           href="/api/auth/discord"
-          className="rounded-lg bg-[#5865F2] px-6 py-3 font-semibold text-white hover:bg-[#4752C4]"
+          className="rounded-lg bg-[#8A2BE2] px-6 py-3 font-semibold text-white hover:bg-[#9B4DE8]"
         >
           Войти через Discord
         </Link>

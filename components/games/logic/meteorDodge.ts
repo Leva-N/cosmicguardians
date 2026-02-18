@@ -27,7 +27,7 @@ export function createMeteorDodge(
       const dx = player.x + 15 - m.x, dy = player.y + 25 - m.y
       if (dx * dx + dy * dy < (m.r + 20) ** 2) onGameOver()
     })
-    ctx.fillStyle = '#22c55e'
+    ctx.fillStyle = '#8A2BE2'
     ctx.fillRect(player.x, player.y, 30, 50)
     anim = requestAnimationFrame(loop)
   }

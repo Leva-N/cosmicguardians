@@ -30,16 +30,16 @@ export function createPlanetDefense(ctx: CanvasRenderingContext2D, w: number, h:
     bullets.forEach((b, i) => {
       b.dist += 12
       if (b.dist > Math.max(w, h)) bullets.splice(i, 1)
-      ctx.strokeStyle = '#a78bfa'
+      ctx.strokeStyle = '#8A2BE2'
       ctx.beginPath()
       ctx.arc(cx + Math.cos(b.angle) * b.dist, cy + Math.sin(b.angle) * b.dist, 3, 0, Math.PI * 2)
       ctx.stroke()
     })
-    ctx.fillStyle = '#3b82f6'
+    ctx.fillStyle = '#8A2BE2'
     ctx.beginPath()
     ctx.arc(cx, cy, planetR, 0, Math.PI * 2)
     ctx.fill()
-    ctx.strokeStyle = '#818cf8'
+    ctx.strokeStyle = '#9B4DE8'
     ctx.lineWidth = 4
     ctx.beginPath()
     ctx.moveTo(cx, cy)

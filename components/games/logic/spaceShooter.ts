@@ -42,11 +42,11 @@ export function createSpaceShooter(
     if (anim - lastSpawn > 30) { rocks.push({ x: Math.random() * (w - 40) + 20, y: -20, r: 12 + Math.random() * 10 }); lastSpawn = anim }
     bullets.forEach((b, i) => {
       b.y -= 8
-      ctx.fillStyle = '#a78bfa'
+      ctx.fillStyle = '#8A2BE2'
       ctx.fillRect(b.x, b.y, 4, 8)
       if (b.y < 0) bullets.splice(i, 1)
     })
-    ctx.fillStyle = '#818cf8'
+    ctx.fillStyle = '#8A2BE2'
     ctx.beginPath()
     ctx.moveTo(ship.x + 15, ship.y)
     ctx.lineTo(ship.x + 30, ship.y + 40)

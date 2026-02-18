@@ -36,7 +36,7 @@ export function createSpaceMining(
         fuel = Math.min(100, fuel + 5)
       }
     })
-    ctx.fillStyle = '#818cf8'
+    ctx.fillStyle = '#8A2BE2'
     ctx.fillRect(ship.x, ship.y, 50, 40)
     ctx.fillStyle = '#22c55e'
     ctx.fillRect(10, 10, fuel * 2, 10)

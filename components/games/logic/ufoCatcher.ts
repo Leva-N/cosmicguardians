@@ -38,7 +38,7 @@ export function createUfoCatcher(
       ctx.fillRect(t.x, t.y, 20, 20)
       if (t.y > h) traps.splice(i, 1)
     })
-    ctx.fillStyle = '#818cf8'
+    ctx.fillStyle = '#8A2BE2'
     ctx.fillRect(ship.x, h - 60, 60, 30)
     anim = requestAnimationFrame(loop)
   }

@@ -42,7 +42,7 @@ export function AboutPageContent() {
                 href={link.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center rounded-xl border border-white/10 bg-white/5 px-5 py-3 min-h-[44px] text-sm font-medium text-[var(--text-secondary)] hover:text-evedex-primary hover:border-evedex-primary/30 hover:bg-evedex-primary/10 transition-colors"
+                className="inline-flex items-center rounded-xl border border-[#8A2BE2]/30 bg-[#8A2BE2]/10 px-5 py-3 min-h-[44px] text-sm font-medium text-[#8A2BE2] hover:text-[#9B4DE8] hover:border-[#8A2BE2]/45 hover:bg-[#8A2BE2]/20 transition-colors"
               >
                 {t(link.labelKey)}
               </a>

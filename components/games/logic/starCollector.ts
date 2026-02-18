@@ -28,7 +28,7 @@ export function createStarCollector(ctx: CanvasRenderingContext2D, w: number, h:
       const dx = ship.x + 15 - h.x, dy = ship.y + 25 - h.y
       if (dx * dx + dy * dy < (h.r + 20) ** 2) onGameOver()
     })
-    ctx.fillStyle = '#818cf8'
+    ctx.fillStyle = '#8A2BE2'
     ctx.fillRect(ship.x, ship.y, 30, 50)
     anim = requestAnimationFrame(loop)
   }

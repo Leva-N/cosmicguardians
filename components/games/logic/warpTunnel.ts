@@ -28,7 +28,7 @@ export function createWarpTunnel(ctx: CanvasRenderingContext2D, w: number, h: nu
       if (o.y > h) { obstacles.splice(i, 1); score += 8; onScore(score); speed = Math.min(10, 5 + score / 40) }
       if (o.lane === lane && o.y + 50 > h - 70 && o.y < h - 20) onGameOver()
     })
-    ctx.fillStyle = '#818cf8'
+    ctx.fillStyle = '#8A2BE2'
     ctx.fillRect(lanes[lane] - 25, h - 80, 50, 60)
     anim = requestAnimationFrame(loop)
   }

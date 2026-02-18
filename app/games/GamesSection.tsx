@@ -12,7 +12,7 @@ export function GamesSection() {
         <Link
           key={g.id}
           href={`/games/play/${g.id}`}
-          className="glass-card group flex flex-col items-start gap-3 rounded-2xl p-4 sm:p-5 md:p-6 text-left transition-all hover:border-evedex-primary/30 hover:shadow-lg min-h-[120px]"
+          className="glass-card glass-card-purple group flex flex-col items-start gap-3 rounded-2xl p-4 sm:p-5 md:p-6 text-left transition-all backdrop-blur-xl hover:shadow-lg min-h-[120px]"
         >
           <span className="text-4xl opacity-90">{g.icon}</span>
           <div>
