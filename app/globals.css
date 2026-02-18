@@ -53,6 +53,11 @@ body {
   overflow-x: hidden;
 }
 
+body.galaxy-bg {
+  background: transparent;
+  background-image: none;
+}
+
 /* Web3 gradient text */
 .gradient-text {
   background: linear-gradient(135deg, var(--gradient-1) 0%, var(--gradient-2) 50%, var(--gradient-3) 100%);
@@ -113,4 +118,10 @@ body {
 @keyframes animate-in {
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+/* Panoramic galaxy background */
+@keyframes galaxy-pan {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(-50%, 0, 0); }
 }

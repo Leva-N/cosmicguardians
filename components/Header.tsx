@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { useTheme } from './ThemeProvider'
 import { useAuth } from './AuthProvider'
 
@@ -15,6 +16,7 @@ export function Header() {
     { href: '/articles', label: 'Статьи' },
     { href: '/members', label: 'Участники' },
     { href: '/games', label: 'Игры' },
+    { href: '/horizon', label: 'Горизонт Событий' },
     { href: '/about', label: 'Об EVEDEX' },
   ]
 
@@ -22,9 +24,13 @@ export function Header() {
     <header className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-transparent backdrop-blur-md">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
         <Link href="/" className="flex items-center gap-2">
-          <div className="h-9 w-9 rounded-lg bg-gradient-to-br from-evedex-primary to-evedex-accent flex items-center justify-center font-bold text-white text-sm shadow-neon">
-            CG
-          </div>
+          <Image
+            src="/images/hello2.png"
+            alt="Cosmic Guardians"
+            width={36}
+            height={36}
+            className="h-9 w-9 object-contain"
+          />
           <span className="font-display text-xl font-bold tracking-tight gradient-text">
             Cosmic Guardians
           </span>

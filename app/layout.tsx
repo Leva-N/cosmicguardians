@@ -1,20 +1,10 @@
 import type { Metadata } from 'next'
-import { Space_Grotesk, Outfit } from 'next/font/google'
 import './globals.css'
 import { ThemeProvider } from '@/components/ThemeProvider'
 import { AuthProvider } from '@/components/AuthProvider'
 import { Header } from '@/components/Header'
 import { Footer } from '@/components/Footer'
-
-const spaceGrotesk = Space_Grotesk({
-  variable: '--font-space',
-  subsets: ['latin'],
-})
-
-const outfit = Outfit({
-  variable: '--font-sans',
-  subsets: ['latin'],
-})
+import { GalaxyBackgroundClient } from '@/components/GalaxyBackgroundClient'
 
 export const metadata: Metadata = {
   title: 'Cosmic Guardians — Волонтёрское сообщество EVEDEX',
@@ -28,7 +18,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ru" suppressHydrationWarning>
-      <body className={`${spaceGrotesk.variable} ${outfit.variable} antialiased min-h-screen flex flex-col`}>
+      <body className="antialiased min-h-screen flex flex-col galaxy-bg">
+        <GalaxyBackgroundClient />
         <ThemeProvider>
           <AuthProvider>
             <Header />
