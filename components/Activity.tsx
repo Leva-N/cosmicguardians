@@ -1,13 +1,14 @@
 'use client'
 
 import { useState } from 'react'
+import { useLocale } from '@/components/LocaleProvider'
 
-const activities = [
-  { id: 'dev', label: 'Разработка', count: 24, active: true },
-  { id: 'docs', label: 'Документация', count: 18, active: true },
-  { id: 'support', label: 'Поддержка', count: 42, active: true },
-  { id: 'design', label: 'Дизайн', count: 12, active: false },
-  { id: 'marketing', label: 'Маркетинг', count: 8, active: false },
+const activityIds = [
+  { id: 'dev', labelKey: 'activity.dev' as const, count: 24, active: true },
+  { id: 'docs', labelKey: 'activity.docs' as const, count: 18, active: true },
+  { id: 'support', labelKey: 'activity.support' as const, count: 42, active: true },
+  { id: 'design', labelKey: 'activity.design' as const, count: 12, active: false },
+  { id: 'marketing', labelKey: 'activity.marketing' as const, count: 8, active: false },
 ]
 
 const recentActivity = [
@@ -19,6 +20,7 @@ const recentActivity = [
 ]
 
 export function Activity() {
+  const { t } = useLocale()
   const [filter, setFilter] = useState<string | null>(null)
 
   return (
@@ -27,14 +29,14 @@ export function Activity() {
         <div className="mb-12 flex flex-col md:flex-row md:items-end md:justify-between gap-6 animate-in">
           <div>
             <h2 className="mb-2 text-3xl font-bold md:text-4xl">
-              <span className="gradient-text">Активность сообщества</span>
+              <span className="gradient-text">{t('activity.title')}</span>
             </h2>
             <p className="text-[var(--text-secondary)]">
-              Живая лента вкладов волонтёров в реальном времени
+              {t('activity.subtitle')}
             </p>
           </div>
           <div className="flex flex-wrap gap-2">
-            {activities.map((a) => (
+            {activityIds.map((a) => (
               <button
                 key={a.id}
                 onClick={() => setFilter(filter === a.id ? null : a.id)}
@@ -44,7 +46,7 @@ export function Activity() {
                     : 'bg-white/5 text-[var(--text-secondary)] hover:bg-white/10 hover:text-[var(--text-primary)]'
                 }`}
               >
-                {a.label} ({a.count})
+                {t(a.labelKey)} ({a.count})
               </button>
             ))}
           </div>
@@ -73,7 +75,10 @@ export function Activity() {
                     </div>
                   </div>
                   <span className="rounded-md bg-white/5 px-2 py-1 text-xs text-[var(--text-secondary)]">
-                    {activities.find((x) => x.id === item.type)?.label ?? item.type}
+                    {(() => {
+                      const act = activityIds.find((x) => x.id === item.type)
+                      return act ? t(act.labelKey) : item.type
+                    })()}
                   </span>
                 </div>
               ))}

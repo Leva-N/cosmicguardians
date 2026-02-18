@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Горизонт Событий — Cosmic Guardians',
-  description: 'Бесконечная стена участников Cosmic Guardians. Подключите Discord и оставьте свою карточку.',
+  description: 'Галактическая стена EVEDEX. Подключите Discord и оставьте свой след в галактике',
 }
 
 export default function HorizonLayout({

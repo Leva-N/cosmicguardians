@@ -41,6 +41,10 @@ html.light {
 
 html {
   scroll-behavior: smooth;
+  /* Фон сразу, чтобы не было белого экрана до загрузки GalaxyBackground */
+  background: var(--bg-primary);
+  background-image: var(--bg-gradient);
+  background-attachment: fixed;
 }
 
 body {

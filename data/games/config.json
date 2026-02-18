@@ -1,0 +1,14 @@
+{
+  "games": [
+    { "id": "space-shooter", "name": "Space Shooter", "slug": "space-shooter" },
+    { "id": "alien-invaders", "name": "Alien Invaders", "slug": "alien-invaders" },
+    { "id": "meteor-dodge", "name": "Meteor Dodge", "slug": "meteor-dodge" },
+    { "id": "galaxy-runner", "name": "Galaxy Runner", "slug": "galaxy-runner" },
+    { "id": "planet-defense", "name": "Planet Defense", "slug": "planet-defense" },
+    { "id": "ufo-catcher", "name": "UFO Catcher", "slug": "ufo-catcher" },
+    { "id": "rocket-landing", "name": "Rocket Landing", "slug": "rocket-landing" },
+    { "id": "star-collector", "name": "Star Collector", "slug": "star-collector" },
+    { "id": "warp-tunnel", "name": "Warp Tunnel", "slug": "warp-tunnel" },
+    { "id": "space-mining", "name": "Space Mining", "slug": "space-mining" }
+  ]
+}

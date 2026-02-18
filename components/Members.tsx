@@ -1,5 +1,7 @@
 'use client'
 
+import { useLocale } from '@/components/LocaleProvider'
+
 const members = [
   { name: 'Volunteer_01', role: 'Core Dev', telegram: 'https://t.me/volunteer01', discord: 'https://discord.com', twitter: 'https://twitter.com/volunteer01', avatar: 'V' },
   { name: 'Doc_Master', role: 'Documentation', telegram: 'https://t.me/docmaster', discord: 'https://discord.com', twitter: 'https://twitter.com/docmaster', avatar: 'D' },
@@ -34,15 +36,16 @@ const members = [
 ]
 
 export function Members() {
+  const { t } = useLocale()
   return (
     <section id="members" className="relative py-24">
       <div className="mx-auto max-w-7xl px-6">
         <div className="mb-12 text-center animate-in">
           <h2 className="mb-4 text-3xl font-bold md:text-4xl">
-            <span className="gradient-text">Участники</span>
+            <span className="gradient-text">{t('members.title')}</span>
           </h2>
           <p className="mx-auto max-w-2xl text-[var(--text-secondary)]">
-            Официальный список людей, которые делают EVEDEX живой и развивающейся платформой
+            {t('members.subtitle')}
           </p>
         </div>
 

@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { useAuth } from '@/components/AuthProvider'
+import { useLocale } from '@/components/LocaleProvider'
 
 interface NewsItem {
   id: string
@@ -26,6 +27,7 @@ function formatDate(iso: string) {
 
 export function News() {
   const { user, isLoading: authLoading } = useAuth()
+  const { t } = useLocale()
   const [news, setNews] = useState<NewsItem[]>([])
   const [loading, setLoading] = useState(true)
   const [submitting, setSubmitting] = useState(false)
@@ -54,11 +56,11 @@ export function News() {
     const file = e.target.files?.[0]
     if (!file) return
     if (!file.type.startsWith('image/')) {
-      setError('Выберите изображение (JPG, PNG, GIF, WebP)')
+      setError(t('news.errorImage'))
       return
     }
     if (file.size > 1_500_000) {
-      setError('Изображение не более 1.5 МБ')
+      setError(t('news.errorSize'))
       return
     }
     const reader = new FileReader()
@@ -83,14 +85,14 @@ export function News() {
       })
       const data = await res.json()
       if (!res.ok) {
-        setError(data.error || 'Ошибка публикации')
+        setError(data.error || t('news.errorPublish'))
         return
       }
       setText('')
       setImage(null)
       setNews((prev) => [data.item, ...prev])
     } catch {
-      setError('Ошибка сети')
+      setError(t('news.errorNetwork'))
     } finally {
       setSubmitting(false)
     }
@@ -104,12 +106,12 @@ export function News() {
       const res = await fetch(`/api/news/${id}`, { method: 'DELETE', credentials: 'include' })
       const data = await res.json()
       if (!res.ok) {
-        setError(data.error || 'Ошибка удаления')
+        setError(data.error || t('news.errorPublish'))
         return
       }
       setNews((prev) => prev.filter((n) => n.id !== id))
     } catch {
-      setError('Ошибка сети')
+      setError(t('news.errorNetwork'))
     } finally {
       setDeletingId(null)
     }
@@ -121,8 +123,7 @@ export function News() {
     <section className="relative py-12 md:py-16">
       <div className="mx-auto max-w-2xl px-4 sm:px-6">
         <div className="mb-8 text-center">
-          <h2 className="text-xl font-semibold text-[var(--text-primary)]">Cosmic Guardians</h2>
-          <p className="text-sm text-[var(--text-secondary)]">Новости сообщества</p>
+          <p className="text-[var(--text-secondary)]">{t('news.intro')}</p>
         </div>
 
         {user && !authLoading && (
@@ -130,7 +131,7 @@ export function News() {
             <textarea
               value={text}
               onChange={(e) => setText(e.target.value)}
-              placeholder="Напишите новость..."
+              placeholder={t('news.placeholder')}
               rows={4}
               className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-[var(--text-primary)] placeholder:text-[var(--text-secondary)]/60 focus:border-evedex-primary/50 focus:outline-none focus:ring-2 focus:ring-evedex-primary/20"
               maxLength={10000}
@@ -146,7 +147,7 @@ export function News() {
                     className="sr-only"
                     disabled={submitting}
                   />
-                  📷 Добавить фото
+                  📷 {t('news.addPhoto')}
                 </label>
                 {image && (
                   <div className="relative inline-block">
@@ -170,7 +171,7 @@ export function News() {
                   disabled={!text.trim() || submitting}
                   className="rounded-lg bg-gradient-to-r from-evedex-primary to-evedex-accent px-5 py-2 text-sm font-semibold text-white disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {submitting ? 'Публикация...' : 'Опубликовать'}
+                  {submitting ? t('news.publishing') : t('news.publish')}
                 </button>
               </div>
             </div>
@@ -182,9 +183,9 @@ export function News() {
 
         <div className="space-y-0 divide-y divide-white/5">
           {loading ? (
-            <p className="py-8 text-center text-[var(--text-secondary)]">Загрузка...</p>
+            <p className="py-8 text-center text-[var(--text-secondary)]">{t('news.loading')}</p>
           ) : news.length === 0 ? (
-            <p className="py-8 text-center text-[var(--text-secondary)]">Пока нет новостей</p>
+            <p className="py-8 text-center text-[var(--text-secondary)]">{t('news.noNews')}</p>
           ) : (
             news.map((item) => (
               <article key={item.id} className="py-5 first:pt-0 last:pb-0">
@@ -216,7 +217,7 @@ export function News() {
                           disabled={deletingId === item.id}
                           className="shrink-0 text-xs text-red-500/80 hover:text-red-500 disabled:opacity-50"
                         >
-                          {deletingId === item.id ? '…' : 'Удалить'}
+                          {deletingId === item.id ? '…' : t('news.delete')}
                         </button>
                       )}
                     </div>
