@@ -38,7 +38,7 @@ export async function translateToLocale(
   const url = `https://api.mymemory.translated.net/get?q=${encoded}&langpair=auto|${target}`
 
   try {
-    const res = await fetch(url, { next: { revalidate: 0 } })
+    const res = await fetch(url, { cache: 'no-store' })
     const data = await res.json()
     const translated = data?.responseData?.translatedText
     if (typeof translated === 'string' && translated.trim()) return translated.trim()

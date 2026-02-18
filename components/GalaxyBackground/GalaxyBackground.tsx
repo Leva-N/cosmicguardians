@@ -33,10 +33,10 @@ void main() {
   vec2 uv = vec2(fract(v_uv.x + u_time * u_panSpeed), v_uv.y);
   vec3 color = texture2D(u_texture, uv).rgb;
 
-  color *= 3.0;
-  color = applyContrast(color, 1.34);
+  color *= 3.8;
+  color = applyContrast(color, 1.6);
   color = applySaturation(color, 2.8);
-  color *= vec3(1.24, 0.78, 1.38);
+  color *= vec3(1.65, 0.58, 1.05);
 
   gl_FragColor = vec4(clamp(color, 0.0, 1.0), 1.0);
 }

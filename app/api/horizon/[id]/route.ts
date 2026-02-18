@@ -33,14 +33,14 @@ async function saveCards(cards: unknown[]) {
 
 export async function DELETE(
   _request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const user = getUserFromRequest(_request)
   if (!user) {
     return NextResponse.json({ error: 'Подключите Discord' }, { status: 401 })
   }
 
-  const { id } = params
+  const { id } = await params
   if (!id) {
     return NextResponse.json({ error: 'ID не указан' }, { status: 400 })
   }

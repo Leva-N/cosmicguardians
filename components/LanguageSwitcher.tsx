@@ -23,7 +23,7 @@ export function LanguageSwitcher() {
       <button
         type="button"
         onClick={() => setOpen(!open)}
-        className="flex items-center gap-1.5 rounded-lg px-3 py-2.5 min-h-[40px] text-sm text-[var(--text-secondary)] hover:text-evedex-primary hover:bg-white/5 transition-all border border-white/10"
+        className="flex items-center gap-1.5 rounded-lg px-3 py-2.5 min-h-[40px] text-sm text-[var(--text-secondary)] hover:text-[#8A2BE2] hover:bg-white/5 hover:border-transparent transition-all border border-white/10 outline-none focus:outline-none focus:ring-0"
         aria-label="Language"
         aria-expanded={open}
       >
@@ -48,10 +48,10 @@ export function LanguageSwitcher() {
                 setLocale(loc)
                 setOpen(false)
               }}
-              className={`w-full text-left px-4 py-3 min-h-[44px] text-sm transition-colors flex items-center gap-2 ${
+              className={`w-full text-left px-4 py-3 min-h-[44px] text-sm transition-colors flex items-center gap-2 outline-none focus:outline-none focus:ring-0 ${
                 loc === locale
                   ? 'text-evedex-primary font-medium'
-                  : 'text-[var(--text-secondary)] hover:bg-white/5 hover:text-[var(--text-primary)]'
+                  : 'text-[var(--text-secondary)] hover:bg-white/5 hover:text-[#8A2BE2]'
               }`}
             >
               <img

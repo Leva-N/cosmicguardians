@@ -50,7 +50,9 @@ async function runWeeklyResetIfNeeded(gameId: string) {
   await fs.writeFile(metaFile, JSON.stringify({ lastReset: thisMonday }))
 }
 
-async function getScores(gameId: string) {
+type ScoreEntry = { score: number; name: string; avatar: string | null; updatedAt: string }
+
+async function getScores(gameId: string): Promise<Record<string, ScoreEntry>> {
   const file = path.join(GAMES_DIR, `${gameId}.json`)
   try {
     return JSON.parse(await fs.readFile(file, 'utf8'))
@@ -71,7 +73,7 @@ export async function GET(
   await runWeeklyResetIfNeeded(gameId)
   const scores = await getScores(gameId)
   const entries = Object.entries(scores)
-    .map(([id, d]: [string, { score: number; name: string; avatar: string | null; updatedAt: string }]) => ({
+    .map(([id, d]) => ({
       id,
       score: d.score,
       name: d.name,

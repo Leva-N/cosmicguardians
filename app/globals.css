@@ -3,6 +3,8 @@
 @tailwind utilities;
 
 :root {
+  --font-sans: ui-sans-serif, system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-display: ui-sans-serif, system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   --bg-primary: #0d0a14;
   --bg-secondary: #120d1a;
   --bg-gradient: linear-gradient(180deg, #0d0a14 0%, #15101f 25%, #120d1c 50%, #0e0a18 75%, #13101d 100%);

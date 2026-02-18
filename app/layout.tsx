@@ -1,5 +1,4 @@
 import type { Metadata, Viewport } from 'next'
-import { Plus_Jakarta_Sans, Outfit } from 'next/font/google'
 import './globals.css'
 import { ThemeProvider } from '@/components/ThemeProvider'
 import { AuthProvider } from '@/components/AuthProvider'
@@ -7,20 +6,6 @@ import { LocaleProvider } from '@/components/LocaleProvider'
 import { Header } from '@/components/Header'
 import { Footer } from '@/components/Footer'
 import { GalaxyBackgroundClient } from '@/components/GalaxyBackgroundClient'
-
-const fontSans = Plus_Jakarta_Sans({
-  subsets: ['latin', 'cyrillic'],
-  variable: '--font-sans',
-  display: 'swap',
-  weight: ['400', '500', '600', '700'],
-})
-
-const fontDisplay = Outfit({
-  subsets: ['latin'],
-  variable: '--font-display',
-  display: 'swap',
-  weight: ['400', '500', '600', '700'],
-})
 
 export const metadata: Metadata = {
   title: 'Cosmic Guardians — Волонтёрское сообщество EVEDEX',
@@ -39,7 +24,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="ru" suppressHydrationWarning className={`${fontSans.variable} ${fontDisplay.variable}`}>
+    <html lang="ru" suppressHydrationWarning>
       <body className="font-sans antialiased min-h-screen flex flex-col galaxy-bg text-[var(--text-primary)]">
         <GalaxyBackgroundClient />
         <ThemeProvider>
