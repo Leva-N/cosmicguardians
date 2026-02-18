@@ -39,8 +39,25 @@ html.light {
   margin: 0;
 }
 
+/* Оптимизация для мобильных и планшетов */
+@media (hover: none) and (pointer: coarse) {
+  button, a, [role="button"] {
+    -webkit-tap-highlight-color: transparent;
+    tap-highlight-color: transparent;
+  }
+}
+
+/* Минимальная зона нажатия для touch (44px) */
+@media (max-width: 1023px) {
+  .touch-target {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+
 html {
   scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
   /* Фон сразу, чтобы не было белого экрана до загрузки GalaxyBackground */
   background: var(--bg-primary);
   background-image: var(--bg-gradient);
@@ -53,8 +70,12 @@ body {
   background-attachment: fixed;
   color: var(--text-primary);
   font-family: var(--font-sans), system-ui, sans-serif;
+  font-feature-settings: 'kern' 1, 'liga' 1;
   line-height: 1.6;
+  letter-spacing: -0.01em;
   overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body.galaxy-bg {
@@ -62,8 +83,15 @@ body.galaxy-bg {
   background-image: none;
 }
 
+/* Headings use display font */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display), var(--font-sans), system-ui, sans-serif;
+  letter-spacing: -0.02em;
+}
+
 /* Web3 gradient text */
 .gradient-text {
+  font-family: var(--font-display), var(--font-sans), system-ui, sans-serif;
   background: linear-gradient(135deg, var(--gradient-1) 0%, var(--gradient-2) 50%, var(--gradient-3) 100%);
   background-size: 200% auto;
   -webkit-background-clip: text;
@@ -128,4 +156,120 @@ body.galaxy-bg {
 @keyframes galaxy-pan {
   from { transform: translate3d(0, 0, 0); }
   to { transform: translate3d(-50%, 0, 0); }
+}
+
+/* Spaceship card — Горизонт */
+.spaceship-card {
+  position: relative;
+  background: linear-gradient(180deg,
+    rgba(30, 25, 50, 0.9) 0%,
+    rgba(20, 15, 35, 0.95) 30%,
+    rgba(15, 10, 28, 0.98) 70%,
+    rgba(12, 8, 22, 0.95) 100%);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(139, 92, 246, 0.2);
+  border-radius: 50% 50% 12px 12px;
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.03) inset,
+    0 4px 20px rgba(0,0,0,0.4),
+    0 0 20px rgba(139, 92, 246, 0.08);
+  transition: all 0.3s ease;
+  overflow: visible;
+}
+
+.spaceship-card::before {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 15%;
+  right: 15%;
+  height: 12px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(139, 92, 246, 0.4) 20%,
+    rgba(99, 102, 241, 0.6) 50%,
+    rgba(139, 92, 246, 0.4) 80%,
+    transparent 100%);
+  border-radius: 50%;
+  filter: blur(4px);
+  opacity: 0.8;
+}
+
+.spaceship-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 85%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.35), transparent);
+  pointer-events: none;
+}
+
+.spaceship-card:hover {
+  border-color: rgba(139, 92, 246, 0.4);
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.05) inset,
+    0 8px 30px rgba(0,0,0,0.5),
+    0 0 40px rgba(139, 92, 246, 0.15);
+  transform: translateY(-2px);
+}
+
+.spaceship-card:hover::before {
+  opacity: 1;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(139, 92, 246, 0.5) 20%,
+    rgba(99, 102, 241, 0.8) 50%,
+    rgba(139, 92, 246, 0.5) 80%,
+    transparent 100%);
+}
+
+.spaceship-cockpit {
+  position: relative;
+  width: 6rem;
+  height: 6rem;
+  margin: 0 auto;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid rgba(139, 92, 246, 0.4);
+  box-shadow:
+    0 0 0 3px rgba(20, 15, 40, 0.8),
+    0 0 20px rgba(139, 92, 246, 0.2) inset,
+    0 0 15px rgba(139, 92, 246, 0.15);
+  background: radial-gradient(circle at 30% 30%, rgba(139, 92, 246, 0.15), transparent 70%);
+}
+
+.spaceship-wing {
+  position: absolute;
+  bottom: 25%;
+  width: 18px;
+  height: 28px;
+  background: linear-gradient(180deg, rgba(139, 92, 246, 0.2) 0%, transparent 70%);
+  border: 1px solid rgba(139, 92, 246, 0.25);
+  border-radius: 0 0 6px 6px;
+  clip-path: polygon(0 0, 100% 0, 100% 85%, 50% 100%, 0 85%);
+}
+
+.spaceship-wing-left { left: -4px; }
+.spaceship-wing-right { right: -4px; transform: scaleX(-1); }
+
+/* Тёмный скроллбар для выпадающих меню */
+.scrollbar-dark {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(139, 92, 246, 0.4) transparent;
+}
+.scrollbar-dark::-webkit-scrollbar {
+  width: 6px;
+}
+.scrollbar-dark::-webkit-scrollbar-track {
+  background: transparent;
+}
+.scrollbar-dark::-webkit-scrollbar-thumb {
+  background: rgba(139, 92, 246, 0.4);
+  border-radius: 3px;
+}
+.scrollbar-dark::-webkit-scrollbar-thumb:hover {
+  background: rgba(139, 92, 246, 0.6);
 }

@@ -38,10 +38,10 @@ const members = [
 export function Members() {
   const { t } = useLocale()
   return (
-    <section id="members" className="relative py-24">
-      <div className="mx-auto max-w-7xl px-6">
-        <div className="mb-12 text-center animate-in">
-          <h2 className="mb-4 text-3xl font-bold md:text-4xl">
+    <section id="members" className="relative py-12 sm:py-16 md:py-24">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6">
+        <div className="mb-8 sm:mb-12 text-center animate-in">
+          <h2 className="mb-4 text-2xl sm:text-3xl font-bold md:text-4xl">
             <span className="gradient-text">{t('members.title')}</span>
           </h2>
           <p className="mx-auto max-w-2xl text-[var(--text-secondary)]">
@@ -49,11 +49,11 @@ export function Members() {
           </p>
         </div>
 
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
           {members.map((member, i) => (
             <div
               key={member.name}
-              className="glass-card group rounded-2xl p-6 flex flex-col items-center text-center animate-in"
+              className="glass-card group rounded-2xl p-4 sm:p-5 md:p-6 flex flex-col items-center text-center animate-in"
               style={{ animationDelay: `${i * 0.05}s` }}
             >
               <div className="mb-4 h-16 w-16 rounded-full bg-gradient-to-br from-evedex-primary to-evedex-accent flex items-center justify-center text-2xl font-bold text-white shadow-neon group-hover:scale-105 transition-transform">
@@ -65,7 +65,7 @@ export function Members() {
                   href={member.telegram}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="rounded-lg bg-white/5 px-3 py-1.5 text-sm text-[var(--text-secondary)] hover:text-evedex-primary hover:bg-evedex-primary/10 transition-colors"
+                  className="rounded-lg bg-white/5 px-3 py-2.5 min-h-[40px] flex items-center text-sm text-[var(--text-secondary)] hover:text-evedex-primary hover:bg-evedex-primary/10 transition-colors"
                 >
                   Telegram
                 </a>
@@ -73,7 +73,7 @@ export function Members() {
                   href={member.discord}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="rounded-lg bg-white/5 px-3 py-1.5 text-sm text-[var(--text-secondary)] hover:text-evedex-primary hover:bg-evedex-primary/10 transition-colors"
+                  className="rounded-lg bg-white/5 px-3 py-2.5 min-h-[40px] flex items-center text-sm text-[var(--text-secondary)] hover:text-evedex-primary hover:bg-evedex-primary/10 transition-colors"
                 >
                   Discord
                 </a>
@@ -81,7 +81,7 @@ export function Members() {
                   href={member.twitter}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="rounded-lg bg-white/5 px-3 py-1.5 text-sm text-[var(--text-secondary)] hover:text-evedex-primary hover:bg-evedex-primary/10 transition-colors"
+                  className="rounded-lg bg-white/5 px-3 py-2.5 min-h-[40px] flex items-center text-sm text-[var(--text-secondary)] hover:text-evedex-primary hover:bg-evedex-primary/10 transition-colors"
                 >
                   X
                 </a>

@@ -96,9 +96,9 @@ export default function HorizonPage() {
         />
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[var(--bg-primary)]/80 to-[var(--bg-primary)] pointer-events-none" />
 
-        <div className="relative mx-auto max-w-7xl px-6 py-24">
-          <div className="mb-16 text-center animate-in">
-            <h1 className="mb-4 text-3xl font-bold md:text-4xl">
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 py-12 sm:py-16 md:py-24">
+          <div className="mb-10 sm:mb-16 text-center animate-in">
+            <h1 className="mb-4 text-2xl sm:text-3xl font-bold md:text-4xl">
               <span className="gradient-text">{t('horizon.title')}</span>
             </h1>
             <p className="mx-auto max-w-2xl text-[var(--text-secondary)]">
@@ -156,15 +156,19 @@ export default function HorizonPage() {
                 {cards.map((card, i) => (
                   <div
                     key={card.id}
-                    className="glass-card group rounded-2xl p-6 flex flex-col items-center text-center animate-in relative"
+                    className="spaceship-card group p-4 sm:p-5 md:p-6 pt-6 flex flex-col items-center text-center animate-in relative"
                     style={{ animationDelay: `${Math.min(i * 0.05, 1)}s` }}
                   >
+                    {/* Крылья корабля */}
+                    <div className="spaceship-wing spaceship-wing-left" aria-hidden />
+                    <div className="spaceship-wing spaceship-wing-right" aria-hidden />
+
                     {canDelete(card) && (
                       <button
                         type="button"
                         onClick={() => handleDelete(card.id)}
                         disabled={deletingId === card.id}
-                        className="absolute top-3 right-3 rounded-lg p-1.5 text-[var(--text-secondary)] hover:text-red-500 hover:bg-red-500/10 transition-colors disabled:opacity-50"
+                        className="absolute top-2 right-2 rounded-lg p-2 min-h-[40px] min-w-[40px] flex items-center justify-center text-[var(--text-secondary)] hover:text-red-500 hover:bg-red-500/10 transition-colors disabled:opacity-50 z-10"
                         title={t('horizon.deleteCard')}
                         aria-label={t('horizon.deleteCard')}
                       >
@@ -173,7 +177,9 @@ export default function HorizonPage() {
                         </svg>
                       </button>
                     )}
-                    <div className="mb-4 h-24 w-24 shrink-0 overflow-hidden rounded-full border-2 border-evedex-primary/30 ring-2 ring-evedex-primary/10 transition-all group-hover:ring-evedex-primary/30">
+
+                    {/* Кабина (иллюминатор с аватаром) */}
+                    <div className="spaceship-cockpit mb-4 shrink-0">
                       {card.avatar ? (
                         <img
                           src={card.avatar}
@@ -181,18 +187,20 @@ export default function HorizonPage() {
                           className="h-full w-full object-cover"
                         />
                       ) : (
-                        <div className="h-full w-full bg-gradient-to-br from-evedex-primary/30 to-evedex-accent/30 flex items-center justify-center">
-                          <span className="text-3xl font-bold text-evedex-primary">
+                        <div className="h-full w-full bg-gradient-to-br from-evedex-primary/40 to-evedex-accent/40 flex items-center justify-center">
+                          <span className="text-2xl font-bold text-evedex-primary">
                             {card.nickname?.charAt(0)?.toUpperCase() || '?'}
                           </span>
                         </div>
                       )}
                     </div>
-                    <p className="font-semibold text-[var(--text-primary)] truncate w-full">
+
+                    {/* Имя на корпусе */}
+                    <p className="font-semibold text-[var(--text-primary)] truncate w-full text-sm sm:text-base">
                       {card.nickname}
                     </p>
-                    <p className="text-xs text-[var(--text-secondary)] mt-1">
-                      {t('horizon.astronaut')}
+                    <p className="text-xs text-[var(--text-secondary)] mt-1 flex items-center gap-1">
+                      <span className="opacity-70">✦</span> {t('horizon.astronaut')}
                     </p>
                   </div>
                 ))}

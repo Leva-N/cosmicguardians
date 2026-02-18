@@ -3,10 +3,12 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useAuth } from '@/components/AuthProvider'
 import { useLocale } from '@/components/LocaleProvider'
+import type { Locale } from '@/lib/i18n/types'
 
 interface NewsItem {
   id: string
   text: string
+  translations?: Partial<Record<Locale, string>>
   author: string
   authorId?: string
   authorAvatar: string | null
@@ -14,9 +16,22 @@ interface NewsItem {
   image?: string
 }
 
-function formatDate(iso: string) {
+const LOCALE_TO_BCP47: Record<Locale, string> = {
+  en: 'en-GB',
+  ru: 'ru-RU',
+  uk: 'uk-UA',
+  lv: 'lv-LV',
+  es: 'es-ES',
+  fr: 'fr-FR',
+  ar: 'ar-SA',
+  zh: 'zh-CN',
+  ja: 'ja-JP',
+  de: 'de-DE',
+}
+
+function formatDate(iso: string, locale: Locale) {
   const d = new Date(iso)
-  return d.toLocaleDateString('ru-RU', {
+  return d.toLocaleDateString(LOCALE_TO_BCP47[locale] || 'ru-RU', {
     day: 'numeric',
     month: 'short',
     year: 'numeric',
@@ -27,7 +42,7 @@ function formatDate(iso: string) {
 
 export function News() {
   const { user, isLoading: authLoading } = useAuth()
-  const { t } = useLocale()
+  const { t, locale } = useLocale()
   const [news, setNews] = useState<NewsItem[]>([])
   const [loading, setLoading] = useState(true)
   const [submitting, setSubmitting] = useState(false)
@@ -137,9 +152,9 @@ export function News() {
               maxLength={10000}
               disabled={submitting}
             />
-            <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
-              <div className="flex items-center gap-3">
-                <label className="cursor-pointer rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-[var(--text-secondary)] hover:border-evedex-primary/50 hover:text-evedex-primary transition-colors">
+            <div className="mt-3 flex flex-col sm:flex-row sm:flex-wrap sm:items-center sm:justify-between gap-3">
+              <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+                <label className="cursor-pointer rounded-lg border border-white/10 bg-white/5 px-4 py-3 min-h-[44px] flex items-center text-sm text-[var(--text-secondary)] hover:border-evedex-primary/50 hover:text-evedex-primary transition-colors">
                   <input
                     type="file"
                     accept="image/*"
@@ -169,7 +184,7 @@ export function News() {
                 <button
                   type="submit"
                   disabled={!text.trim() || submitting}
-                  className="rounded-lg bg-gradient-to-r from-evedex-primary to-evedex-accent px-5 py-2 text-sm font-semibold text-white disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="rounded-lg bg-gradient-to-r from-evedex-primary to-evedex-accent px-5 py-3 min-h-[44px] flex items-center text-sm font-semibold text-white disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {submitting ? t('news.publishing') : t('news.publish')}
                 </button>
@@ -208,14 +223,14 @@ export function News() {
                       <p className="text-xs text-[var(--text-secondary)]">
                         <span className="text-sm font-semibold text-evedex-achievement">{item.author}</span>
                         {' · '}
-                        {formatDate(item.createdAt)}
+                        {formatDate(item.createdAt, locale)}
                       </p>
                       {canDelete(item) && (
                         <button
                           type="button"
                           onClick={() => handleDelete(item.id)}
                           disabled={deletingId === item.id}
-                          className="shrink-0 text-xs text-red-500/80 hover:text-red-500 disabled:opacity-50"
+                          className="shrink-0 min-h-[36px] min-w-[36px] flex items-center justify-center text-xs text-red-500/80 hover:text-red-500 disabled:opacity-50 py-2"
                         >
                           {deletingId === item.id ? '…' : t('news.delete')}
                         </button>
@@ -229,7 +244,7 @@ export function News() {
                       />
                     )}
                     <p className="text-[var(--text-primary)] leading-relaxed whitespace-pre-wrap">
-                      {item.text}
+                      {item.translations?.[locale] ?? item.text}
                     </p>
                   </div>
                 </div>

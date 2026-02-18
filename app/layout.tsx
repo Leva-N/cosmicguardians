@@ -1,4 +1,5 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
+import { Plus_Jakarta_Sans, Outfit } from 'next/font/google'
 import './globals.css'
 import { ThemeProvider } from '@/components/ThemeProvider'
 import { AuthProvider } from '@/components/AuthProvider'
@@ -7,9 +8,29 @@ import { Header } from '@/components/Header'
 import { Footer } from '@/components/Footer'
 import { GalaxyBackgroundClient } from '@/components/GalaxyBackgroundClient'
 
+const fontSans = Plus_Jakarta_Sans({
+  subsets: ['latin', 'cyrillic'],
+  variable: '--font-sans',
+  display: 'swap',
+  weight: ['400', '500', '600', '700'],
+})
+
+const fontDisplay = Outfit({
+  subsets: ['latin'],
+  variable: '--font-display',
+  display: 'swap',
+  weight: ['400', '500', '600', '700'],
+})
+
 export const metadata: Metadata = {
   title: 'Cosmic Guardians — Волонтёрское сообщество EVEDEX',
   description: 'Cosmic Guardians — волонтёры, где каждый участник вносит вклад в развитие EVEDEX.',
+}
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
 }
 
 export default function RootLayout({
@@ -18,14 +39,14 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="ru" suppressHydrationWarning>
-      <body className="antialiased min-h-screen flex flex-col galaxy-bg">
+    <html lang="ru" suppressHydrationWarning className={`${fontSans.variable} ${fontDisplay.variable}`}>
+      <body className="font-sans antialiased min-h-screen flex flex-col galaxy-bg text-[var(--text-primary)]">
         <GalaxyBackgroundClient />
         <ThemeProvider>
           <LocaleProvider>
             <AuthProvider>
               <Header />
-              <main className="pt-[72px] flex-1 flex flex-col">{children}</main>
+              <main className="pt-[calc(3.5rem+env(safe-area-inset-top,0px))] sm:pt-[calc(4rem+env(safe-area-inset-top,0px))] md:pt-[calc(72px+env(safe-area-inset-top,0px))] flex-1 flex flex-col">{children}</main>
               <Footer />
             </AuthProvider>
           </LocaleProvider>

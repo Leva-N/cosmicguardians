@@ -14,3 +14,17 @@ export const LOCALE_NAMES: Record<Locale, string> = {
   de: 'Deutsch',
 }
 
+/** Коды стран для отображения флагов (ISO 3166-1 alpha-2) */
+export const LOCALE_FLAG_COUNTRY: Record<Locale, string> = {
+  en: 'gb',
+  ru: 'ru',
+  uk: 'ua',
+  lv: 'lv',
+  es: 'es',
+  fr: 'fr',
+  ar: 'sa',
+  zh: 'cn',
+  ja: 'jp',
+  de: 'de',
+}
+

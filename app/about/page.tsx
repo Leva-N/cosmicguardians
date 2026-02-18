@@ -1,8 +1,8 @@
 import { AboutPageContent } from './AboutPageContent'
 
 export const metadata = {
-  title: 'Об EVEDEX — Cosmic Guardians',
-  description: 'EVEDEX — гибридная криптовалютная биржа: дневная торговля, P2P, копитрейдинг и фьючерсы.',
+  title: 'EVEDEX — Cosmic Guardians',
+  description: 'Гибридная криптовалютная биржа для торговли фьючерсами. EVEDEX сочетает быстроту CEX с децентрализацией и безопасностью DEX.',
 }
 
 export default function AboutPage() {

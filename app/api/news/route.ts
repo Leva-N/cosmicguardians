@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { readFile, writeFile, mkdir } from 'fs/promises'
 import path from 'path'
+import { translateToAllLocales } from '@/lib/translate'
+import type { Locale } from '@/lib/i18n/types'
 
 const DATA_DIR = path.join(process.cwd(), 'data')
 const NEWS_FILE = path.join(DATA_DIR, 'news.json')
@@ -8,6 +10,8 @@ const NEWS_FILE = path.join(DATA_DIR, 'news.json')
 export interface NewsItem {
   id: string
   text: string
+  /** Переводы на языки сайта: locale -> текст */
+  translations?: Partial<Record<Locale, string>>
   author: string
   authorId: string
   authorAvatar: string | null
@@ -96,6 +100,16 @@ export async function POST(request: NextRequest) {
       createdAt,
       ...(image && { image }),
     }
+
+    try {
+      const translations = await translateToAllLocales(text)
+      if (Object.keys(translations).length > 0) {
+        item.translations = translations
+      }
+    } catch (translateErr) {
+      console.warn('News translation skipped:', translateErr)
+    }
+
     news.unshift(item)
     await saveNews(news)
     return NextResponse.json({ ok: true, item })

@@ -24,11 +24,11 @@ export function Activity() {
   const [filter, setFilter] = useState<string | null>(null)
 
   return (
-    <section id="activity" className="relative py-24">
-      <div className="mx-auto max-w-7xl px-6">
-        <div className="mb-12 flex flex-col md:flex-row md:items-end md:justify-between gap-6 animate-in">
+    <section id="activity" className="relative py-12 sm:py-16 md:py-24">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6">
+        <div className="mb-8 sm:mb-12 flex flex-col md:flex-row md:items-end md:justify-between gap-4 sm:gap-6 animate-in">
           <div>
-            <h2 className="mb-2 text-3xl font-bold md:text-4xl">
+            <h2 className="mb-2 text-2xl sm:text-3xl font-bold md:text-4xl">
               <span className="gradient-text">{t('activity.title')}</span>
             </h2>
             <p className="text-[var(--text-secondary)]">
@@ -40,7 +40,7 @@ export function Activity() {
               <button
                 key={a.id}
                 onClick={() => setFilter(filter === a.id ? null : a.id)}
-                className={`rounded-lg px-4 py-2 text-sm font-medium transition-all ${
+                className={`rounded-lg px-4 py-2.5 min-h-[40px] text-sm font-medium transition-all ${
                   filter === a.id
                     ? 'bg-gradient-to-r from-evedex-primary to-evedex-secondary text-white'
                     : 'bg-white/5 text-[var(--text-secondary)] hover:bg-white/10 hover:text-[var(--text-primary)]'
@@ -57,9 +57,9 @@ export function Activity() {
             {recentActivity
               .filter((a) => !filter || a.type === filter)
               .map((item, i) => (
-                <div
-                  key={`${item.user}-${i}`}
-                  className="flex items-center justify-between gap-4 px-6 py-4 hover:bg-white/5 transition-colors"
+<div
+                key={`${item.user}-${i}`}
+                className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-4 px-4 sm:px-6 py-4 hover:bg-white/5 transition-colors"
                 >
                   <div className="flex items-center gap-4">
                     <div className="h-10 w-10 rounded-full bg-gradient-to-br from-evedex-primary/30 to-evedex-secondary/30 flex items-center justify-center text-sm font-bold">

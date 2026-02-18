@@ -7,12 +7,12 @@ import { useLocale } from '@/components/LocaleProvider'
 export function GamesSection() {
   const { t } = useLocale()
   return (
-    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+    <div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
       {GAMES_LIST.map((g) => (
         <Link
           key={g.id}
           href={`/games/play/${g.id}`}
-          className="glass-card group flex flex-col items-start gap-3 rounded-2xl p-6 text-left transition-all hover:border-evedex-primary/30 hover:shadow-lg"
+          className="glass-card group flex flex-col items-start gap-3 rounded-2xl p-4 sm:p-5 md:p-6 text-left transition-all hover:border-evedex-primary/30 hover:shadow-lg min-h-[120px]"
         >
           <span className="text-4xl opacity-90">{g.icon}</span>
           <div>

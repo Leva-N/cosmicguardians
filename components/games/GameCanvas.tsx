@@ -79,30 +79,30 @@ export function GameCanvas({ gameId, gameName, width = 400, height = 600, runGam
     <div className="relative flex justify-center bg-[#0a0a12] p-4" style={{ minHeight: height + 32 }}>
       <canvas ref={canvasRef} width={width} height={height} className="border border-white/10" />
       {phase === 'start' && (
-        <div className="absolute inset-0 flex flex-col items-center justify-center gap-6 bg-[#0a0a12]/95 p-8">
+        <div className="absolute inset-0 flex flex-col items-center justify-center gap-6 bg-[#0a0a12]/95 p-4 sm:p-8">
           <p className="text-[var(--text-secondary)]">Нажмите чтобы начать</p>
           <button
             onClick={start}
-            className="rounded-lg bg-evedex-primary px-8 py-3 font-semibold text-white hover:opacity-90"
+            className="rounded-lg bg-evedex-primary px-8 py-3 min-h-[44px] font-semibold text-white hover:opacity-90"
           >
             Играть
           </button>
         </div>
       )}
       {phase === 'over' && (
-        <div className="absolute inset-0 flex flex-col items-center justify-center gap-6 bg-[#0a0a12]/95 p-8">
+        <div className="absolute inset-0 flex flex-col items-center justify-center gap-6 bg-[#0a0a12]/95 p-4 sm:p-8">
           <h3 className="text-xl font-bold text-red-400">Game Over</h3>
           <p className="text-lg">Счёт: {score}</p>
           <div className="flex gap-3">
             <button
               onClick={submitScore}
-              className="rounded-lg border border-evedex-primary px-6 py-2 text-sm font-medium text-evedex-primary hover:bg-evedex-primary/10"
+              className="rounded-lg border border-evedex-primary px-6 py-3 min-h-[44px] text-sm font-medium text-evedex-primary hover:bg-evedex-primary/10"
             >
               Отправить результат
             </button>
             <button
               onClick={start}
-              className="rounded-lg bg-evedex-primary px-6 py-2 text-sm font-semibold text-white hover:opacity-90"
+              className="rounded-lg bg-evedex-primary px-6 py-3 min-h-[44px] text-sm font-semibold text-white hover:opacity-90"
             >
               Играть снова
             </button>
