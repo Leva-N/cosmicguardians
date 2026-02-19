@@ -19,6 +19,14 @@ export function Footer() {
   return (
     <footer className="relative border-t border-[#8A2BE2]/30 bg-transparent backdrop-blur-md mt-auto">
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 py-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] flex items-center justify-center">
+        <a
+          href="https://medium.com/@doctorlev90/cosmic-guardians-website-7712eb15c16e"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="absolute left-4 sm:left-6 top-1/2 -translate-y-1/2 text-xs font-medium text-[#8A2BE2] hover:text-[#9B4DE8] transition-colors"
+        >
+          v. 1.0
+        </a>
         <Link href="/" className="flex items-center gap-1.5">
           <Image
             src="/images/hello2.png"

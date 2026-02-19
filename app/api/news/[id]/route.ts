@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { readFile, writeFile, mkdir } from 'fs/promises'
 import path from 'path'
+import { isAdmin } from '@/lib/admin-ids'
 import type { NewsItem } from '../route'
 
 const DATA_DIR = path.join(process.cwd(), 'data')
@@ -93,7 +94,7 @@ export async function DELETE(
     }
 
     const item = news[index]
-    if (item.authorId !== user.id) {
+    if (item.authorId !== user.id && !isAdmin(user.id)) {
       return NextResponse.json({ error: 'Удалять можно только свои новости' }, { status: 403 })
     }
 

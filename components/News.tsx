@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
 import { useAuth } from '@/components/AuthProvider'
-import { GOLD_MEMBER_DISCORD_IDS, MEMBER_DISCORD_IDS } from '@/components/Members'
+import { ADMIN_DISCORD_IDS, GOLD_MEMBER_DISCORD_IDS, MEMBER_DISCORD_IDS } from '@/components/Members'
 import { useLocale } from '@/components/LocaleProvider'
 import type { Locale } from '@/lib/i18n/types'
 
@@ -159,7 +159,7 @@ export function News() {
     }
   }
 
-  const canDelete = (item: NewsItem) => user && item.authorId && item.authorId === user.id
+  const canDelete = (item: NewsItem) => user && (ADMIN_DISCORD_IDS.has(user.id) || (item.authorId && item.authorId === user.id))
   const canPublish = user && (GOLD_MEMBER_DISCORD_IDS.has(user.id) || MEMBER_DISCORD_IDS.has(user.id))
   const titleValid = title.trim().length >= 40 && title.trim().length <= 80
   const shortDescValid = !shortDescription.trim() || (shortDescription.trim().length >= 100 && shortDescription.trim().length <= 160)

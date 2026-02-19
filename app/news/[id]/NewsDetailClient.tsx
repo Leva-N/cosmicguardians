@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useAuth } from '@/components/AuthProvider'
+import { ADMIN_DISCORD_IDS } from '@/components/Members'
 import { useLocale } from '@/components/LocaleProvider'
 import type { Locale } from '@/lib/i18n/types'
 
@@ -60,7 +61,8 @@ export function NewsDetail({ id }: { id: string }) {
   }, [id])
 
   const handleDelete = async () => {
-    if (!user || !item || item.authorId !== user.id) return
+    if (!user || !item) return
+    if (!ADMIN_DISCORD_IDS.has(user.id) && item.authorId !== user.id) return
     if (!confirm(t('news.deleteConfirm'))) return
     setDeleting(true)
     try {
@@ -101,7 +103,7 @@ export function NewsDetail({ id }: { id: string }) {
   const shortDescription =
     typeof tr === 'object' && tr?.shortDescription ? tr.shortDescription : item.shortDescription
   const text = typeof tr === 'object' && tr?.text ? tr.text : (typeof tr === 'string' ? tr : item.text)
-  const canDelete = user && item.authorId && item.authorId === user.id
+  const canDelete = user && (ADMIN_DISCORD_IDS.has(user.id) || (item.authorId && item.authorId === user.id))
 
   return (
     <section className="relative py-12 md:py-16">

@@ -43,9 +43,10 @@ function normalizeForDisplay(url: string): string {
 
 export interface TranslatorPostsProps {
   xUser?: { id: string; username: string } | null
+  isAdmin?: boolean
 }
 
-export function TranslatorPosts({ xUser = null }: TranslatorPostsProps) {
+export function TranslatorPosts({ xUser = null, isAdmin = false }: TranslatorPostsProps) {
   const { t } = useLocale()
   const [posts, setPosts] = useState<ApiPost[]>([])
   const [loading, setLoading] = useState(true)
@@ -123,7 +124,7 @@ export function TranslatorPosts({ xUser = null }: TranslatorPostsProps) {
   }
 
   const handleDelete = async (post: ApiPost) => {
-    if (!xUser || post.xUserId !== xUser.id) return
+    if (!isAdmin && (!xUser || post.xUserId !== xUser.id)) return
     if (!confirm(t('translator.deleteConfirm'))) return
     try {
       const res = await fetch(`/api/translator/posts/${post.id}`, {
@@ -203,7 +204,7 @@ export function TranslatorPosts({ xUser = null }: TranslatorPostsProps) {
                     <a href={normalizeForDisplay(post.url)}>Post from X</a>
                   </blockquote>
                 </div>
-                {xUser && post.xUserId === xUser.id && (
+                {(isAdmin || (xUser && post.xUserId === xUser.id)) && (
                   <button
                     type="button"
                     onClick={() => handleDelete(post)}

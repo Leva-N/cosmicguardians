@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { useAuth } from '@/components/AuthProvider'
-import { GOLD_MEMBER_DISCORD_IDS, MEMBER_DISCORD_IDS } from '@/components/Members'
+import { ADMIN_DISCORD_IDS, GOLD_MEMBER_DISCORD_IDS, MEMBER_DISCORD_IDS } from '@/components/Members'
 import { useLocale } from '@/components/LocaleProvider'
 import Link from 'next/link'
 
@@ -84,7 +84,7 @@ export default function HorizonPage() {
     }
   }
 
-  const canDelete = (card: HorizonCard) => user && card.userId === user.id
+  const canDelete = (card: HorizonCard) => user && (ADMIN_DISCORD_IDS.has(user.id) || card.userId === user.id)
 
   const getStarOrientation = (id: string, index: number) => {
     const orientations = [

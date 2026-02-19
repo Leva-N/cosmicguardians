@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
+import { ADMIN_DISCORD_IDS } from '@/lib/admin-ids'
 import { useLocale } from '@/components/LocaleProvider'
 
 function shuffleArray<T>(array: T[]): T[] {
@@ -61,8 +62,9 @@ export const MEMBER_DISCORD_IDS = new Set([
     .filter((id): id is string => Boolean(id)),
 ])
 
+export { ADMIN_DISCORD_IDS }
+
 export const GOLD_MEMBER_DISCORD_IDS = new Set([
-  '406118319612231682',
   '785741234202738688',
   '1147174887954333808',
   '392022688798867476',

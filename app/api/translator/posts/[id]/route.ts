@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { loadPosts, savePosts } from '@/lib/translator-storage'
+import { isAdmin } from '@/lib/admin-ids'
 
 function getXUserFromRequest(request: NextRequest): { id: string } | null {
   const xUser = request.cookies.get('x_user')?.value
@@ -12,13 +13,27 @@ function getXUserFromRequest(request: NextRequest): { id: string } | null {
   }
 }
 
+function getDiscordUserFromRequest(request: NextRequest): { id: string } | null {
+  const discordUser = request.cookies.get('discord_user')?.value
+  if (!discordUser) return null
+  try {
+    const user = JSON.parse(discordUser)
+    return user?.id ? { id: user.id } : null
+  } catch {
+    return null
+  }
+}
+
 export async function DELETE(
-  _request: NextRequest,
+  request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const xUser = getXUserFromRequest(_request)
-  if (!xUser) {
-    return NextResponse.json({ error: 'Подключите X' }, { status: 401 })
+  const xUser = getXUserFromRequest(request)
+  const discordUser = getDiscordUserFromRequest(request)
+  const canDeleteOwn = xUser
+  const isAdminUser = discordUser && isAdmin(discordUser.id)
+  if (!canDeleteOwn && !isAdminUser) {
+    return NextResponse.json({ error: 'Подключите X или войдите через Discord' }, { status: 401 })
   }
 
   const { id } = await params
@@ -34,7 +49,8 @@ export async function DELETE(
     }
 
     const post = posts[index]
-    if (post.xUserId !== xUser.id) {
+    const ownPost = xUser && post.xUserId === xUser.id
+    if (!ownPost && !isAdminUser) {
       return NextResponse.json({ error: 'Удалять можно только свои посты' }, { status: 403 })
     }
 

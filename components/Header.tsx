@@ -4,7 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useAuth } from './AuthProvider'
-import { GOLD_MEMBER_DISCORD_IDS, MEMBER_DISCORD_IDS } from './Members'
+import { ADMIN_DISCORD_IDS, GOLD_MEMBER_DISCORD_IDS, MEMBER_DISCORD_IDS } from './Members'
 import { useLocale } from './LocaleProvider'
 import { LanguageSwitcher } from './LanguageSwitcher'
 
@@ -38,16 +38,19 @@ export function Header() {
               Cosmic Guardians
             </span>
           </Link>
-          {user && (GOLD_MEMBER_DISCORD_IDS.has(user.id) || MEMBER_DISCORD_IDS.has(user.id)) && (
+          {user && (ADMIN_DISCORD_IDS.has(user.id) || GOLD_MEMBER_DISCORD_IDS.has(user.id) || MEMBER_DISCORD_IDS.has(user.id)) && (
             <span
-              className={`badge-verified badge-tooltip shrink-0 cursor-default ${GOLD_MEMBER_DISCORD_IDS.has(user.id) ? 'text-[#FFD700]' : 'text-[#00ff00]'}`}
-              data-tooltip={GOLD_MEMBER_DISCORD_IDS.has(user.id) ? t('header.verifiedTeam') : t('header.verifiedGuardian')}
+              className={`badge-verified shrink-0 cursor-default inline-flex items-center gap-1.5 ${ADMIN_DISCORD_IDS.has(user.id) ? 'text-red-500' : GOLD_MEMBER_DISCORD_IDS.has(user.id) ? 'text-[#FFD700] badge-tooltip' : 'text-[#00ff00] badge-tooltip'}`}
+              data-tooltip={!ADMIN_DISCORD_IDS.has(user.id) ? (GOLD_MEMBER_DISCORD_IDS.has(user.id) ? t('header.verifiedTeam') : t('header.verifiedGuardian')) : undefined}
               role="img"
-              aria-label={GOLD_MEMBER_DISCORD_IDS.has(user.id) ? t('header.verifiedTeam') : t('header.verifiedGuardian')}
+              aria-label={ADMIN_DISCORD_IDS.has(user.id) ? 'Администратор' : GOLD_MEMBER_DISCORD_IDS.has(user.id) ? t('header.verifiedTeam') : t('header.verifiedGuardian')}
             >
-              <svg className="h-4 w-4 sm:h-5 sm:w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+              <svg className="h-4 w-4 sm:h-5 sm:w-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M5 12l5 5 9-10" />
               </svg>
+              {ADMIN_DISCORD_IDS.has(user.id) && (
+                <span className="text-xs font-medium hidden sm:inline">Администратор</span>
+              )}
             </span>
           )}
         </div>
@@ -79,7 +82,7 @@ export function Header() {
                       alt=""
                       className="h-6 w-6 rounded-full"
                     />
-                    <span className={`text-sm font-medium max-w-[120px] truncate ${GOLD_MEMBER_DISCORD_IDS.has(user.id) ? 'text-[#FFD700]' : MEMBER_DISCORD_IDS.has(user.id) ? 'text-[#00ff00]' : 'text-[var(--text-primary)]'}`}>
+                    <span className={`text-sm font-medium max-w-[120px] truncate ${ADMIN_DISCORD_IDS.has(user.id) ? 'text-red-500' : GOLD_MEMBER_DISCORD_IDS.has(user.id) ? 'text-[#FFD700]' : MEMBER_DISCORD_IDS.has(user.id) ? 'text-[#00ff00]' : 'text-[var(--text-primary)]'}`}>
                       {user.global_name || user.username}
                     </span>
                   </div>
@@ -154,7 +157,12 @@ export function Header() {
                       alt=""
                       className="h-9 w-9 rounded-full"
                     />
-                    <span className={`text-sm font-medium ${GOLD_MEMBER_DISCORD_IDS.has(user.id) ? 'text-[#FFD700]' : MEMBER_DISCORD_IDS.has(user.id) ? 'text-[#00ff00]' : ''}`}>{user.global_name || user.username}</span>
+                    <div className="flex flex-col items-start gap-0.5">
+                      <span className={`text-sm font-medium ${ADMIN_DISCORD_IDS.has(user.id) ? 'text-red-500' : GOLD_MEMBER_DISCORD_IDS.has(user.id) ? 'text-[#FFD700]' : MEMBER_DISCORD_IDS.has(user.id) ? 'text-[#00ff00]' : ''}`}>{user.global_name || user.username}</span>
+                      {ADMIN_DISCORD_IDS.has(user.id) && (
+                        <span className="text-xs text-red-500 font-medium">Администратор</span>
+                      )}
+                    </div>
                   </div>
                   <button
                     onClick={() => { logout(); setMobileOpen(false); }}

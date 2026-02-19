@@ -1,6 +1,8 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useAuth } from '@/components/AuthProvider'
+import { ADMIN_DISCORD_IDS } from '@/components/Members'
 import { useLocale } from '@/components/LocaleProvider'
 import { TranslatorPosts } from '@/components/TranslatorPosts'
 
@@ -11,7 +13,9 @@ interface XUser {
 }
 
 export default function TranslatorPage() {
+  const { user } = useAuth()
   const { t } = useLocale()
+  const isAdmin = user ? ADMIN_DISCORD_IDS.has(user.id) : false
   const [xUser, setXUser] = useState<XUser | null>(null)
   const [loading, setLoading] = useState(true)
 
@@ -76,7 +80,7 @@ export default function TranslatorPage() {
         </div>
       </div>
 
-      <TranslatorPosts xUser={xUser} />
+      <TranslatorPosts xUser={xUser} isAdmin={isAdmin} />
     </section>
   )
 }

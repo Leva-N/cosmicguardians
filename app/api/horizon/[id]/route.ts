@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { readFile, writeFile, mkdir } from 'fs/promises'
 import path from 'path'
+import { isAdmin } from '@/lib/admin-ids'
 
 const DATA_DIR = path.join(process.cwd(), 'data')
 const HORIZON_FILE = path.join(DATA_DIR, 'horizon.json')
@@ -53,7 +54,7 @@ export async function DELETE(
     }
 
     const card = cards[index]
-    if (card.userId !== user.id) {
+    if (card.userId !== user.id && !isAdmin(user.id)) {
       return NextResponse.json({ error: 'Удалять можно только свою карточку' }, { status: 403 })
     }
 
