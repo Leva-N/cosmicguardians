@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 const BG_VERTEX_SHADER_SOURCE = `
 attribute vec2 a_position;
@@ -91,10 +91,33 @@ function createProgram(
   return program
 }
 
+function getImageForTexture(
+  image: HTMLImageElement,
+  maxSize: number
+): HTMLImageElement | HTMLCanvasElement {
+  if (image.naturalWidth <= maxSize && image.naturalHeight <= maxSize) {
+    return image
+  }
+  const scale = Math.min(maxSize / image.naturalWidth, maxSize / image.naturalHeight, 1)
+  const w = Math.floor(image.naturalWidth * scale)
+  const h = Math.floor(image.naturalHeight * scale)
+  const offscreen = document.createElement('canvas')
+  offscreen.width = w
+  offscreen.height = h
+  const ctx = offscreen.getContext('2d')
+  if (!ctx) return image
+  ctx.drawImage(image, 0, 0, w, h)
+  return offscreen
+}
+
 export function GalaxyBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
+  const [useFallback, setUseFallback] = useState(false)
+  const runningRef = useRef(true)
+  const rafIdRef = useRef(0)
 
   useEffect(() => {
+    runningRef.current = true
     const canvas = canvasRef.current
     if (!canvas) return
 
@@ -104,23 +127,28 @@ export function GalaxyBackground() {
       depth: false,
       stencil: false,
       preserveDrawingBuffer: false,
-      powerPreference: 'high-performance',
+      powerPreference: 'default',
     })
-    if (!gl) return
+    if (!gl) {
+      setUseFallback(true)
+      return
+    }
 
     const bgProgram = createProgram(
       gl,
       BG_VERTEX_SHADER_SOURCE,
       BG_FRAGMENT_SHADER_SOURCE
     )
-    if (!bgProgram) return
+    if (!bgProgram) {
+      setUseFallback(true)
+      return
+    }
 
     const image = new Image()
-    image.src = '/images/8k_stars_milky_way.jpg'
-    image.decoding = 'async'
+    const isMobileOrTablet = typeof window !== 'undefined' && window.innerWidth < 1025
+    image.src = isMobileOrTablet ? '/images/2k_stars_milky_way.jpg' : '/images/8k_stars_milky_way.jpg'
 
-    let rafId = 0
-    let running = true
+    rafIdRef.current = 0
     let bgTextureReady = false
     let startTime = performance.now()
     let lastTime = performance.now()
@@ -172,12 +200,12 @@ export function GalaxyBackground() {
     }
 
     const draw = (time: number) => {
-      if (!running) return
+      if (!runningRef.current) return
 
       const dt = Math.min((time - lastTime) / 1000, 0.1)
       lastTime = time
       if (dt <= 0) {
-        rafId = window.requestAnimationFrame(draw)
+        rafIdRef.current = window.requestAnimationFrame(draw)
         return
       }
 
@@ -201,43 +229,74 @@ export function GalaxyBackground() {
         gl.drawArrays(gl.TRIANGLES, 0, 6)
       }
 
-      rafId = window.requestAnimationFrame(draw)
+      rafIdRef.current = window.requestAnimationFrame(draw)
     }
 
     const onLoad = () => {
-      gl.bindTexture(gl.TEXTURE_2D, bgTexture)
-      gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1)
-      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image)
-      gl.generateMipmap(gl.TEXTURE_2D)
+      try {
+        const maxSize = gl.getParameter(gl.MAX_TEXTURE_SIZE) as number
+        const source = getImageForTexture(image, maxSize)
 
-      bgTextureReady = true
-      startTime = performance.now()
-      resize()
-      if (!rafId) {
-        rafId = window.requestAnimationFrame(draw)
+        gl.bindTexture(gl.TEXTURE_2D, bgTexture)
+        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1)
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, source)
+        gl.generateMipmap(gl.TEXTURE_2D)
+
+        bgTextureReady = true
+        startTime = performance.now()
+        resize()
+        if (!rafIdRef.current) {
+          rafIdRef.current = window.requestAnimationFrame(draw)
+        }
+      } catch {
+        runningRef.current = false
+        if (rafIdRef.current) window.cancelAnimationFrame(rafIdRef.current)
+        setUseFallback(true)
       }
     }
 
+    const onError = () => {
+      runningRef.current = false
+      if (rafIdRef.current) window.cancelAnimationFrame(rafIdRef.current)
+      setUseFallback(true)
+    }
+
     image.addEventListener('load', onLoad)
+    image.addEventListener('error', onError)
     window.addEventListener('resize', resize)
     resize()
 
     if (image.complete && image.naturalWidth > 0) {
       onLoad()
     } else {
-      rafId = window.requestAnimationFrame(draw)
+      rafIdRef.current = window.requestAnimationFrame(draw)
     }
 
     return () => {
-      running = false
-      window.cancelAnimationFrame(rafId)
+      runningRef.current = false
+      if (rafIdRef.current) window.cancelAnimationFrame(rafIdRef.current)
       image.removeEventListener('load', onLoad)
+      image.removeEventListener('error', onError)
       window.removeEventListener('resize', resize)
       gl.deleteTexture(bgTexture)
       gl.deleteBuffer(quadBuffer)
       gl.deleteProgram(bgProgram)
     }
   }, [])
+
+  if (useFallback) {
+    return (
+      <div
+        className="absolute inset-0 pointer-events-none overflow-hidden"
+        style={{
+          background: 'var(--bg-primary)',
+          backgroundImage: 'var(--bg-gradient)',
+          backgroundAttachment: 'fixed',
+        }}
+        aria-hidden="true"
+      />
+    )
+  }
 
   return (
     <div className="absolute inset-0 pointer-events-none overflow-hidden bg-black">
