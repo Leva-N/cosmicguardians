@@ -443,17 +443,6 @@ h1, h2, h3, h4, h5, h6 {
 .spaceship-wing-left { left: -4px; }
 .spaceship-wing-right { right: -4px; transform: scaleX(-1); }
 
-/* Home blocks — cosmic cards, overlapping layout */
-.home-blocks-wrap {
-  --overlap: -32px;
-}
-@media (min-width: 640px) {
-  .home-blocks-wrap { --overlap: -44px; }
-}
-@media (min-width: 1024px) {
-  .home-blocks-wrap { --overlap: -56px; }
-}
-
 .home-block:hover {
   box-shadow: 0 0 32px rgba(155, 77, 232, 0.22), 0 0 0 1px rgba(155, 77, 232, 0.35);
 }

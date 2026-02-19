@@ -88,20 +88,15 @@ export function HomeBlocks() {
   return (
     <section className="relative py-16 sm:py-20 md:py-28 overflow-hidden">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
-        <div className="home-blocks-wrap flex flex-wrap justify-center">
-          {BLOCKS.map((block, i) => (
+        <div className="flex flex-wrap justify-center gap-4 sm:gap-6">
+          {BLOCKS.map((block) => (
             <Link
               key={block.href}
               href={block.href}
-              className="home-block group relative flex flex-col rounded-2xl border border-[#9B4DE8]/30 bg-[#9B4DE8]/12 backdrop-blur-sm p-6 sm:p-8 min-h-[180px] sm:min-h-[220px] transition-all duration-300 hover:z-20 hover:scale-[1.03] hover:border-[#9B4DE8]/45 hover:bg-[#9B4DE8]/18"
+              className="home-block group relative flex flex-col items-center text-center rounded-2xl border border-[#9B4DE8]/30 bg-[#9B4DE8]/12 backdrop-blur-sm p-6 sm:p-8 min-h-[180px] sm:min-h-[220px] w-[min(100%,300px)] min-w-[240px] max-w-[320px] transition-all duration-300 hover:scale-[1.03] hover:border-[#9B4DE8]/45 hover:bg-[#9B4DE8]/18"
               style={
                 {
                   '--block-accent': block.accent,
-                  width: 'min(100%, 300px)',
-                  minWidth: '240px',
-                  maxWidth: '320px',
-                  marginLeft: i > 0 ? 'var(--overlap)' : 0,
-                  zIndex: BLOCKS.length - i,
                   boxShadow: '0 8px 32px rgba(0,0,0,0.35), 0 0 0 1px rgba(255,255,255,0.04)',
                 } as React.CSSProperties
               }
