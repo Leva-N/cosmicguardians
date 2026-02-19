@@ -4,6 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useAuth } from './AuthProvider'
+import { GOLD_MEMBER_DISCORD_IDS, MEMBER_DISCORD_IDS } from './Members'
 import { useLocale } from './LocaleProvider'
 import { LanguageSwitcher } from './LanguageSwitcher'
 
@@ -14,7 +15,7 @@ export function Header() {
 
   const navLinks = [
     { href: '/news', labelKey: 'header.nav.news' as const },
-    { href: '/articles', labelKey: 'header.nav.articles' as const },
+    { href: '/translator', labelKey: 'header.nav.translator' as const },
     { href: '/members', labelKey: 'header.nav.members' as const },
     { href: '/horizon', labelKey: 'header.nav.horizon' as const },
     { href: '/games', labelKey: 'header.nav.games' as const },
@@ -24,18 +25,32 @@ export function Header() {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 border-b border-[#8A2BE2]/30 bg-transparent backdrop-blur-md pt-[env(safe-area-inset-top)]">
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-6 px-4 py-3 sm:px-6 sm:py-3.5">
-        <Link href="/" className="flex items-center gap-2.5 shrink-0">
-          <Image
-            src="/images/hello2.png"
-            alt="Cosmic Guardians"
-            width={40}
-            height={40}
-            className="h-8 w-8 sm:h-9 sm:w-9 object-contain rounded-lg"
-          />
-          <span className="font-display text-lg sm:text-xl font-semibold tracking-tight gradient-text">
-            Cosmic Guardians
-          </span>
-        </Link>
+        <div className="flex items-center gap-2.5 shrink-0">
+          <Link href="/" className="flex items-center gap-2.5">
+            <Image
+              src="/images/hello2.png"
+              alt="Cosmic Guardians"
+              width={40}
+              height={40}
+              className="h-8 w-8 sm:h-9 sm:w-9 object-contain rounded-lg"
+            />
+            <span className="font-display text-lg sm:text-xl font-semibold tracking-tight gradient-text">
+              Cosmic Guardians
+            </span>
+          </Link>
+          {user && (GOLD_MEMBER_DISCORD_IDS.has(user.id) || MEMBER_DISCORD_IDS.has(user.id)) && (
+            <span
+              className={`badge-verified badge-tooltip shrink-0 cursor-default ${GOLD_MEMBER_DISCORD_IDS.has(user.id) ? 'text-[#FFD700]' : 'text-[#00ff00]'}`}
+              data-tooltip={GOLD_MEMBER_DISCORD_IDS.has(user.id) ? t('header.verifiedTeam') : t('header.verifiedGuardian')}
+              role="img"
+              aria-label={GOLD_MEMBER_DISCORD_IDS.has(user.id) ? t('header.verifiedTeam') : t('header.verifiedGuardian')}
+            >
+              <svg className="h-4 w-4 sm:h-5 sm:w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M5 12l5 5 9-10" />
+              </svg>
+            </span>
+          )}
+        </div>
 
         <nav className="hidden md:flex items-center gap-0.5 lg:gap-1">
           {navLinks.map((link) => (
@@ -64,7 +79,7 @@ export function Header() {
                       alt=""
                       className="h-6 w-6 rounded-full"
                     />
-                    <span className="text-sm font-medium text-[var(--text-primary)] max-w-[120px] truncate">
+                    <span className={`text-sm font-medium max-w-[120px] truncate ${GOLD_MEMBER_DISCORD_IDS.has(user.id) ? 'text-[#FFD700]' : MEMBER_DISCORD_IDS.has(user.id) ? 'text-[#00ff00]' : 'text-[var(--text-primary)]'}`}>
                       {user.global_name || user.username}
                     </span>
                   </div>
@@ -139,7 +154,7 @@ export function Header() {
                       alt=""
                       className="h-9 w-9 rounded-full"
                     />
-                    <span className="text-sm font-medium">{user.global_name || user.username}</span>
+                    <span className={`text-sm font-medium ${GOLD_MEMBER_DISCORD_IDS.has(user.id) ? 'text-[#FFD700]' : MEMBER_DISCORD_IDS.has(user.id) ? 'text-[#00ff00]' : ''}`}>{user.global_name || user.username}</span>
                   </div>
                   <button
                     onClick={() => { logout(); setMobileOpen(false); }}

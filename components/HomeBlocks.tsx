@@ -16,9 +16,9 @@ const BLOCKS = [
     ),
   },
   {
-    href: '/articles',
-    titleKey: 'header.nav.articles' as const,
-    descKey: 'home.blocks.articles.desc' as const,
+    href: '/translator',
+    titleKey: 'header.nav.translator' as const,
+    descKey: 'home.blocks.translator.desc' as const,
     accent: '#8A2BE2',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">

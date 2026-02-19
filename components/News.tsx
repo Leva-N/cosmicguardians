@@ -1,14 +1,18 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
+import Link from 'next/link'
 import { useAuth } from '@/components/AuthProvider'
+import { GOLD_MEMBER_DISCORD_IDS, MEMBER_DISCORD_IDS } from '@/components/Members'
 import { useLocale } from '@/components/LocaleProvider'
 import type { Locale } from '@/lib/i18n/types'
 
 interface NewsItem {
   id: string
+  title: string
+  shortDescription: string
   text: string
-  translations?: Partial<Record<Locale, string>>
+  translations?: Partial<Record<Locale, { title?: string; shortDescription?: string; text?: string }>>
   author: string
   authorId?: string
   authorAvatar: string | null
@@ -46,6 +50,9 @@ export function News() {
   const [news, setNews] = useState<NewsItem[]>([])
   const [loading, setLoading] = useState(true)
   const [submitting, setSubmitting] = useState(false)
+  const [modalOpen, setModalOpen] = useState(false)
+  const [title, setTitle] = useState('')
+  const [shortDescription, setShortDescription] = useState('')
   const [text, setText] = useState('')
   const [image, setImage] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
@@ -86,9 +93,21 @@ export function News() {
     reader.readAsDataURL(file)
   }
 
+  const resetModal = () => {
+    setTitle('')
+    setShortDescription('')
+    setText('')
+    setImage(null)
+    setError(null)
+    setModalOpen(false)
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!text.trim() || !user) return
+    if (!title.trim() || !text.trim() || !image || !user) return
+    if (title.trim().length < 40 || title.trim().length > 80) return
+    if (shortDescription.trim() && (shortDescription.trim().length < 100 || shortDescription.trim().length > 160)) return
+    if (text.trim().length > 1500) return
     setSubmitting(true)
     setError(null)
     try {
@@ -96,15 +115,19 @@ export function News() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
-        body: JSON.stringify({ text: text.trim(), ...(image && { image }) }),
+        body: JSON.stringify({
+          title: title.trim(),
+          shortDescription: shortDescription.trim() || undefined,
+          text: text.trim(),
+          image,
+        }),
       })
       const data = await res.json()
       if (!res.ok) {
         setError(data.error || t('news.errorPublish'))
         return
       }
-      setText('')
-      setImage(null)
+      resetModal()
       setNews((prev) => [data.item, ...prev])
     } catch {
       setError(t('news.errorNetwork'))
@@ -113,7 +136,9 @@ export function News() {
     }
   }
 
-  const handleDelete = async (id: string) => {
+  const handleDelete = async (e: React.MouseEvent, id: string) => {
+    e.preventDefault()
+    e.stopPropagation()
     if (!user) return
     setDeletingId(id)
     setError(null)
@@ -133,123 +158,209 @@ export function News() {
   }
 
   const canDelete = (item: NewsItem) => user && item.authorId && item.authorId === user.id
+  const canPublish = user && (GOLD_MEMBER_DISCORD_IDS.has(user.id) || MEMBER_DISCORD_IDS.has(user.id))
+  const titleValid = title.trim().length >= 40 && title.trim().length <= 80
+  const shortDescValid = !shortDescription.trim() || (shortDescription.trim().length >= 100 && shortDescription.trim().length <= 160)
+  const textValid = text.trim().length > 0 && text.trim().length <= 1500
+  const allFilled = title.trim() && text.trim() && image && titleValid && shortDescValid && textValid
 
   return (
     <section className="relative py-12 md:py-16">
-      <div className="mx-auto max-w-2xl px-4 sm:px-6">
-        <div className="mb-8 text-center">
+      <div className="mx-auto max-w-4xl px-4 sm:px-6">
+        <div className="mb-8 flex flex-col items-center gap-4 text-center">
           <p className="text-[var(--text-secondary)]">{t('news.intro')}</p>
+          {canPublish && !authLoading && (
+            <button
+              type="button"
+              onClick={() => setModalOpen(true)}
+              className="shrink-0 rounded-lg bg-[#00ff00] px-3 py-1.5 text-sm font-medium text-black transition-all hover:bg-[#00dd00]"
+            >
+              {t('news.addNews')}
+            </button>
+          )}
         </div>
 
-        {user && !authLoading && (
-          <form onSubmit={handleSubmit} className="mb-10 animate-in">
-            <textarea
-              value={text}
-              onChange={(e) => setText(e.target.value)}
-              placeholder={t('news.placeholder')}
-              rows={4}
-              className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-[var(--text-primary)] placeholder:text-[var(--text-secondary)]/60 focus:border-evedex-primary/50 focus:outline-none focus:ring-2 focus:ring-evedex-primary/20"
-              maxLength={10000}
-              disabled={submitting}
-            />
-            <div className="mt-3 flex flex-col sm:flex-row sm:flex-wrap sm:items-center sm:justify-between gap-3">
-              <div className="flex flex-wrap items-center gap-2 sm:gap-3">
-                <label className="cursor-pointer rounded-lg border border-white/10 bg-white/5 px-4 py-3 min-h-[44px] flex items-center text-sm text-[var(--text-secondary)] hover:border-evedex-primary/50 hover:text-evedex-primary transition-colors">
+        {/* Modal */}
+        {modalOpen && (
+          <div
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm"
+            onClick={() => !submitting && resetModal()}
+          >
+            <div
+              className="w-full max-w-lg rounded-2xl bg-[var(--bg-secondary)] border border-white/10 p-6 shadow-xl animate-in"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <h2 className="mb-6 text-xl font-bold text-[var(--text-primary)]">
+                {t('news.modalTitle')}
+              </h2>
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <div>
+                  <label className="mb-1.5 block text-sm font-medium text-[var(--text-secondary)]">
+                    {t('news.fieldTitle')}
+                  </label>
                   <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleImageChange}
-                    className="sr-only"
+                    type="text"
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    placeholder={t('news.fieldTitle')}
+                    minLength={40}
+                    maxLength={80}
+                    className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-[var(--text-primary)] placeholder:text-[var(--text-secondary)]/60 focus:border-evedex-primary/50 focus:outline-none focus:ring-2 focus:ring-evedex-primary/20"
                     disabled={submitting}
                   />
-                  📷 {t('news.addPhoto')}
-                </label>
-                {image && (
-                  <div className="relative inline-block">
-                    <img src={image} alt="" className="h-20 w-20 rounded-lg object-cover border border-white/10" />
-                    <button
-                      type="button"
-                      onClick={() => setImage(null)}
-                      className="absolute -top-2 -right-2 h-6 w-6 rounded-full bg-red-500/80 text-white text-xs flex items-center justify-center hover:bg-red-500"
-                    >
-                      ×
-                    </button>
-                  </div>
-                )}
-              </div>
-              <div className="flex items-center gap-3">
-                <span className="text-xs text-[var(--text-secondary)]">
-                  {text.length} / 10 000
-                </span>
-                <button
-                  type="submit"
-                  disabled={!text.trim() || submitting}
-                  className="rounded-lg bg-gradient-to-r from-evedex-primary to-evedex-accent px-5 py-3 min-h-[44px] flex items-center text-sm font-semibold text-white disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {submitting ? t('news.publishing') : t('news.publish')}
-                </button>
-              </div>
+                  <span className={`mt-1 block text-xs ${title.length >= 40 && title.length <= 80 ? 'text-[var(--text-secondary)]' : 'text-amber-500'}`}>
+                    {title.length} / 40–80
+                  </span>
+                </div>
+                <div>
+                  <label className="mb-1.5 block text-sm font-medium text-[var(--text-secondary)]">
+                    {t('news.fieldShortDesc')}
+                  </label>
+                  <textarea
+                    value={shortDescription}
+                    onChange={(e) => setShortDescription(e.target.value)}
+                    placeholder={`${t('news.fieldShortDesc')} (${t('news.optional')})`}
+                    rows={2}
+                    maxLength={160}
+                    className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-[var(--text-primary)] placeholder:text-[var(--text-secondary)]/60 focus:border-evedex-primary/50 focus:outline-none focus:ring-2 focus:ring-evedex-primary/20 resize-none"
+                    disabled={submitting}
+                  />
+                  <span className={`mt-1 block text-xs ${!shortDescription || (shortDescription.length >= 100 && shortDescription.length <= 160) ? 'text-[var(--text-secondary)]' : 'text-amber-500'}`}>
+                    {shortDescription.length} / 100–160 ({t('news.optional')})
+                  </span>
+                </div>
+                <div>
+                  <label className="mb-1.5 block text-sm font-medium text-[var(--text-secondary)]">
+                    {t('news.fieldText')}
+                  </label>
+                  <textarea
+                    value={text}
+                    onChange={(e) => setText(e.target.value)}
+                    placeholder={t('news.placeholder')}
+                    rows={5}
+                    maxLength={1500}
+                    className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-[var(--text-primary)] placeholder:text-[var(--text-secondary)]/60 focus:border-evedex-primary/50 focus:outline-none focus:ring-2 focus:ring-evedex-primary/20 resize-none"
+                    disabled={submitting}
+                  />
+                  <span className={`mt-1 block text-xs ${text.length <= 1500 ? 'text-[var(--text-secondary)]' : 'text-amber-500'}`}>{text.length} / 1 500</span>
+                </div>
+                <div>
+                  <label className="mb-1.5 block text-sm font-medium text-[var(--text-secondary)]">
+                    {t('news.fieldPhoto')}
+                  </label>
+                  <label className="flex cursor-pointer items-center justify-center gap-2 rounded-xl border border-dashed border-white/20 bg-white/5 px-4 py-6 text-[var(--text-secondary)] hover:border-evedex-primary/50 hover:text-evedex-primary transition-colors">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageChange}
+                      className="sr-only"
+                      disabled={submitting}
+                    />
+                    {image ? (
+                      <div className="relative">
+                        <img src={image} alt="" className="h-24 w-auto max-w-full rounded-lg object-cover" />
+                        <button
+                          type="button"
+                          onClick={(e) => { e.preventDefault(); setImage(null); }}
+                          className="absolute -top-2 -right-2 h-6 w-6 rounded-full bg-red-500/80 text-white text-xs flex items-center justify-center hover:bg-red-500"
+                        >
+                          ×
+                        </button>
+                      </div>
+                    ) : (
+                      <>📷 {t('news.addPhoto')}</>
+                    )}
+                  </label>
+                </div>
+                {error && <p className="text-sm text-red-500">{error}</p>}
+                <div className="flex gap-3 pt-2">
+                  <button
+                    type="button"
+                    onClick={resetModal}
+                    disabled={submitting}
+                    className="flex-1 rounded-xl border border-white/20 px-4 py-3 font-medium text-[var(--text-secondary)] hover:bg-white/5 disabled:opacity-50"
+                  >
+                    Отмена
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={!allFilled || submitting}
+                    className="flex-1 rounded-xl bg-[#00ff00] px-4 py-3 font-semibold text-black disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#00dd00]"
+                  >
+                    {submitting ? t('news.publishing') : t('news.publish')}
+                  </button>
+                </div>
+              </form>
             </div>
-            {error && (
-              <p className="mt-2 text-sm text-red-500">{error}</p>
-            )}
-          </form>
+          </div>
         )}
 
-        <div className="space-y-0 divide-y divide-white/5">
+        <div className="space-y-4">
           {loading ? (
             <p className="py-8 text-center text-[var(--text-secondary)]">{t('news.loading')}</p>
           ) : news.length === 0 ? (
             <p className="py-8 text-center text-[var(--text-secondary)]">{t('news.noNews')}</p>
           ) : (
-            news.map((item) => (
-              <article key={item.id} className="py-5 first:pt-0 last:pb-0">
-                <div className="flex gap-3">
-                  <div className="mt-1 h-9 w-9 shrink-0 overflow-hidden rounded-full bg-gradient-to-br from-evedex-primary/30 to-evedex-accent/30 flex items-center justify-center">
-                    {item.authorAvatar ? (
-                      <img
-                        src={item.authorAvatar}
-                        alt=""
-                        className="h-full w-full object-cover"
-                      />
-                    ) : (
-                      <span className="text-sm font-bold text-evedex-primary">
-                        {item.author?.charAt(0)?.toUpperCase() || '?'}
-                      </span>
-                    )}
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <div className="flex items-start justify-between gap-2 mb-1">
-                      <p className="text-xs text-[var(--text-secondary)]">
-                        <span className="text-sm font-semibold text-evedex-achievement">{item.author}</span>
-                        {' · '}
-                        {formatDate(item.createdAt, locale)}
-                      </p>
-                      {canDelete(item) && (
-                        <button
-                          type="button"
-                          onClick={() => handleDelete(item.id)}
-                          disabled={deletingId === item.id}
-                          className="shrink-0 min-h-[36px] min-w-[36px] flex items-center justify-center text-xs text-red-500/80 hover:text-red-500 disabled:opacity-50 py-2"
-                        >
-                          {deletingId === item.id ? '…' : t('news.delete')}
-                        </button>
-                      )}
-                    </div>
+            news.map((item) => {
+              const tr = item.translations?.[locale]
+              const displayTitle =
+                typeof tr === 'object' && tr?.title ? tr.title : item.title
+              const displayDesc =
+                typeof tr === 'object' && tr?.shortDescription ? tr.shortDescription : item.shortDescription
+              return (
+                <Link
+                  key={item.id}
+                  href={`/news/${item.id}`}
+                  className="group block rounded-2xl border border-white/10 bg-white/5 overflow-hidden hover:border-evedex-primary/30 hover:bg-white/[0.07] transition-all"
+                >
+                  <div className="flex flex-col sm:flex-row">
                     {item.image && (
-                      <img
-                        src={item.image}
-                        alt=""
-                        className="mb-3 rounded-xl max-w-full max-h-80 object-contain"
-                      />
+                      <div className="sm:w-48 shrink-0 h-40 sm:h-auto sm:min-h-[180px]">
+                        <img
+                          src={item.image}
+                          alt=""
+                          className="h-full w-full object-cover"
+                        />
+                      </div>
                     )}
-                    <p className="text-[var(--text-primary)] leading-relaxed whitespace-pre-wrap">
-                      {item.translations?.[locale] ?? item.text}
-                    </p>
+                    <div className="flex-1 p-4 sm:p-5">
+                      <h3 className="mb-2 font-semibold text-lg text-[var(--text-primary)] group-hover:text-evedex-primary transition-colors">
+                        {displayTitle}
+                      </h3>
+                      <p className="mb-3 text-sm text-[var(--text-secondary)] line-clamp-2">
+                        {displayDesc}
+                      </p>
+                      <div className="flex items-center justify-between gap-2">
+                        <div className="flex items-center gap-2 text-xs text-[var(--text-secondary)]">
+                          <div className="h-6 w-6 rounded-full overflow-hidden bg-gradient-to-br from-evedex-primary/30 to-evedex-accent/30 flex items-center justify-center shrink-0">
+                            {item.authorAvatar ? (
+                              <img src={item.authorAvatar} alt="" className="h-full w-full object-cover" />
+                            ) : (
+                              <span className="text-xs font-bold text-evedex-primary">
+                                {item.author?.charAt(0)?.toUpperCase() || '?'}
+                              </span>
+                            )}
+                          </div>
+                          <span className="font-medium text-evedex-achievement">{item.author}</span>
+                          <span>·</span>
+                          <time>{formatDate(item.createdAt, locale)}</time>
+                        </div>
+                        {canDelete(item) && (
+                          <button
+                            type="button"
+                            onClick={(e) => handleDelete(e, item.id)}
+                            disabled={deletingId === item.id}
+                            className="shrink-0 text-xs text-red-500/80 hover:text-red-500 disabled:opacity-50 py-1 px-2"
+                          >
+                            {deletingId === item.id ? '…' : t('news.delete')}
+                          </button>
+                        )}
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </article>
-            ))
+                </Link>
+              )
+            })
           )}
         </div>
       </div>

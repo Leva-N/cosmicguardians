@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Горизонт Событий — Cosmic Guardians',
+  title: 'Вселенная — Cosmic Guardians',
   description: 'Подключите Discord, чтобы оставить свой след в галактике',
 }
 

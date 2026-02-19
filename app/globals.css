@@ -75,7 +75,6 @@ body {
   font-feature-settings: 'kern' 1, 'liga' 1;
   line-height: 1.6;
   letter-spacing: -0.01em;
-  overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -183,6 +182,43 @@ h1, h2, h3, h4, h5, h6 {
   box-shadow: 0 0 30px rgba(155, 77, 232, 0.15) !important;
 }
 
+/* Verified badge pulse glow */
+@keyframes verified-pulse {
+  0%, 100% { opacity: 1; filter: drop-shadow(0 0 4px currentColor); }
+  50% { opacity: 0.85; filter: drop-shadow(0 0 8px currentColor); }
+}
+.badge-verified {
+  animation: verified-pulse 2s ease-in-out infinite;
+}
+
+/* Custom tooltip for verified badge */
+.badge-tooltip {
+  position: relative;
+}
+.badge-tooltip::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%) scale(0.95);
+  padding: 6px 12px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #ffffff;
+  background: #8A2BE2;
+  border-radius: 8px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s, transform 0.2s;
+  z-index: 100;
+}
+.badge-tooltip:hover::after,
+.badge-tooltip:focus-visible::after {
+  opacity: 1;
+  transform: translateX(-50%) scale(1);
+}
+
 /* Fade-in animation (replaces framer-motion) */
 .animate-in {
   animation: animate-in 0.5s ease-out forwards;
@@ -227,15 +263,72 @@ h1, h2, h3, h4, h5, h6 {
   inset: 0;
   background: linear-gradient(180deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.3) 40%, rgba(0,0,0,0.6) 100%);
   pointer-events: none;
+  z-index: 0;
 }
 
+.star-card-glow:hover .star-card,
 .star-card:hover {
   border-color: rgba(155, 77, 232, 0.5);
   box-shadow:
     0 0 0 1px rgba(255,255,255,0.05) inset,
     0 8px 30px rgba(0,0,0,0.5),
     0 0 40px rgba(155, 77, 232, 0.18);
-  transform: translateY(-2px) scale(1.02);
+}
+/* Движение звезды при наведении (поворот сохраняется) */
+.star-card-glow:hover .star-card.rotate-0,
+.star-card.rotate-0:hover { transform: rotate(0deg) translateY(-2px) scale(1.02); }
+.star-card-glow:hover .star-card.rotate-90,
+.star-card.rotate-90:hover { transform: rotate(90deg) translateY(-2px) scale(1.02); }
+.star-card-glow:hover .star-card.rotate-180,
+.star-card.rotate-180:hover { transform: rotate(180deg) translateY(-2px) scale(1.02); }
+.star-card-glow:hover .star-card.-rotate-90,
+.star-card.-rotate-90:hover { transform: rotate(-90deg) translateY(-2px) scale(1.02); }
+
+/* Обёртка для свечения — filter на контейнере (обходит clip-path) */
+.star-card-glow .star-card {
+  width: 100%;
+  height: 100%;
+}
+
+/* Обычные пользователи — слабое фиолетовое свечение */
+.star-card-glow.star-card-purple {
+  filter: drop-shadow(0 0 4px rgba(155, 77, 232, 0.35));
+  transition: filter 0.3s ease;
+}
+.star-card-glow.star-card-purple:hover {
+  filter: drop-shadow(0 0 8px rgba(155, 77, 232, 0.5)) drop-shadow(0 0 20px rgba(155, 77, 232, 0.3));
+}
+
+/* Cosmic Guardian — зелёное свечение (усиливается при наведении) */
+.star-card-glow.star-card-green {
+  filter: drop-shadow(0 0 5px rgba(0, 255, 0, 0.45));
+  transition: filter 0.3s ease;
+}
+.star-card-glow.star-card-green:hover {
+  filter: drop-shadow(0 0 10px rgba(0, 255, 0, 0.9)) drop-shadow(0 0 25px rgba(0, 255, 0, 0.6)) drop-shadow(0 0 40px rgba(0, 255, 0, 0.4));
+}
+.star-card.star-card-green {
+  border: 2px solid rgba(0, 255, 0, 0.85);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+}
+.star-card.star-card-green:hover {
+  border-color: rgba(0, 255, 0, 1);
+}
+
+/* Члены команды — золотое свечение (усиливается при наведении) */
+.star-card-glow.star-card-gold {
+  filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.45));
+  transition: filter 0.3s ease;
+}
+.star-card-glow.star-card-gold:hover {
+  filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.9)) drop-shadow(0 0 25px rgba(255, 215, 0, 0.6)) drop-shadow(0 0 40px rgba(255, 215, 0, 0.4));
+}
+.star-card.star-card-gold {
+  border: 2px solid rgba(255, 215, 0, 0.85);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+}
+.star-card.star-card-gold:hover {
+  border-color: rgba(255, 215, 0, 1);
 }
 
 /* Spaceship card — Горизонт (legacy, replaced by star-card) */

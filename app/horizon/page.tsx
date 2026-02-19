@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { useAuth } from '@/components/AuthProvider'
+import { GOLD_MEMBER_DISCORD_IDS, MEMBER_DISCORD_IDS } from '@/components/Members'
 import { useLocale } from '@/components/LocaleProvider'
 import Link from 'next/link'
 
@@ -84,9 +85,23 @@ export default function HorizonPage() {
 
   const canDelete = (card: HorizonCard) => user && card.userId === user.id
 
+  const getStarOrientation = (id: string, index: number) => {
+    const orientations = [
+      { star: 'rotate-0', content: '' },
+      { star: 'rotate-90', content: '-rotate-90' },
+      { star: 'rotate-180', content: '-rotate-180' },
+      { star: '-rotate-90', content: 'rotate-90' },
+    ]
+    let hash = index
+    for (let i = 0; i < id.length; i++) {
+      hash = ((hash << 5) - hash + id.charCodeAt(i)) | 0
+    }
+    return orientations[Math.abs(hash) % 4]
+  }
+
   return (
     <>
-      <section className="relative min-h-screen overflow-hidden">
+      <section className="relative min-h-screen">
         {/* Фон бесконечной стены — повторяющаяся сетка */}
         <div
           className="absolute inset-0 grid-pattern opacity-40"
@@ -153,21 +168,25 @@ export default function HorizonPage() {
                 className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-4 md:gap-5 justify-items-center"
                 style={{ animation: 'fadeIn 0.5s ease-out' }}
               >
-                {cards.map((card, i) => (
+                {cards.map((card, i) => {
+                  const glowClass = GOLD_MEMBER_DISCORD_IDS.has(card.userId)
+                    ? 'star-card-gold'
+                    : MEMBER_DISCORD_IDS.has(card.userId)
+                      ? 'star-card-green'
+                      : 'star-card-purple'
+                  const { star: starRotate, content: contentRotate } = getStarOrientation(card.id, i)
+                  return (
                   <div
                     key={card.id}
-                    className="star-card group flex flex-col items-center justify-center animate-in relative"
-                    style={{
-                      animationDelay: `${Math.min(i * 0.05, 1)}s`,
-                      backgroundImage: card.avatar ? `url(${card.avatar})` : undefined,
-                    }}
+                    className={`relative w-full aspect-square flex justify-center items-center animate-in star-card-glow ${glowClass}`}
+                    style={{ animationDelay: `${Math.min(i * 0.05, 1)}s` }}
                   >
                     {canDelete(card) && (
                       <button
                         type="button"
                         onClick={() => handleDelete(card.id)}
                         disabled={deletingId === card.id}
-                        className="absolute top-1 right-1 sm:top-2 sm:right-2 rounded-lg p-1.5 sm:p-2 min-h-[32px] min-w-[32px] sm:min-h-[36px] sm:min-w-[36px] flex items-center justify-center bg-black/50 text-white hover:bg-red-500/80 hover:text-white transition-colors disabled:opacity-50 z-10 border border-white/20"
+                        className="absolute top-0 right-0 sm:top-1 sm:right-1 rounded-lg p-1.5 sm:p-2 min-h-[32px] min-w-[32px] sm:min-h-[36px] sm:min-w-[36px] flex items-center justify-center bg-black/50 text-white hover:bg-red-500/80 hover:text-white transition-colors disabled:opacity-50 z-20 border border-white/20"
                         title={t('horizon.deleteCard')}
                         aria-label={t('horizon.deleteCard')}
                       >
@@ -176,13 +195,30 @@ export default function HorizonPage() {
                         </svg>
                       </button>
                     )}
-
-                    {/* Ник по центру звезды */}
-                    <p className="relative z-[1] font-semibold text-white text-center text-xs sm:text-sm md:text-base px-2 truncate max-w-full drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)]">
+                    <div
+                      className={`star-card group flex flex-col items-center justify-center relative w-full h-full ${starRotate} ${glowClass}`}
+                    >
+                    <div
+                      className={`absolute inset-0 bg-[rgba(50,35,80,0.95)] [background-size:cover] [background-position:center] ${contentRotate}`}
+                      style={{ backgroundImage: card.avatar ? `url(${card.avatar})` : undefined }}
+                    />
+                    <div className={`absolute inset-0 bg-gradient-to-b from-black/50 via-black/30 to-black/60 pointer-events-none ${contentRotate}`} />
+                    <div className={`relative z-[1] flex flex-col items-center justify-center w-full h-full ${contentRotate}`}>
+                    <p
+                      className={`relative z-[1] font-semibold text-center text-xs sm:text-sm md:text-base px-2 truncate max-w-full drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)] ${
+                        GOLD_MEMBER_DISCORD_IDS.has(card.userId)
+                          ? 'text-[#FFD700]'
+                          : MEMBER_DISCORD_IDS.has(card.userId)
+                            ? 'text-[#00ff00]'
+                            : 'text-white'
+                      }`}
+                    >
                       {card.nickname || 'Anonymous'}
                     </p>
+                    </div>
+                    </div>
                   </div>
-                ))}
+                )})}
               </div>
             )}
           </div>
