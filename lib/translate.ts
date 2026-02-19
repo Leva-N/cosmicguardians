@@ -16,6 +16,7 @@ const MYMEMORY_LANG: Record<Locale, string> = {
   zh: 'zh-CN',
   ja: 'ja',
   de: 'de',
+  tr: 'tr',
 }
 
 const MAX_TEXT_LENGTH = 3000

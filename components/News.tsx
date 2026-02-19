@@ -31,6 +31,7 @@ const LOCALE_TO_BCP47: Record<Locale, string> = {
   zh: 'zh-CN',
   ja: 'ja-JP',
   de: 'de-DE',
+  tr: 'tr-TR',
 }
 
 function formatDate(iso: string, locale: Locale) {
@@ -140,6 +141,7 @@ export function News() {
     e.preventDefault()
     e.stopPropagation()
     if (!user) return
+    if (!confirm(t('news.deleteConfirm'))) return
     setDeletingId(id)
     setError(null)
     try {

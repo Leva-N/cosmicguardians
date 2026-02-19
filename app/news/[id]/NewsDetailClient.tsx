@@ -30,6 +30,7 @@ const LOCALE_TO_BCP47: Record<Locale, string> = {
   zh: 'zh-CN',
   ja: 'ja-JP',
   de: 'de-DE',
+  tr: 'tr-TR',
 }
 
 function formatDate(iso: string, locale: Locale) {
@@ -60,7 +61,7 @@ export function NewsDetail({ id }: { id: string }) {
 
   const handleDelete = async () => {
     if (!user || !item || item.authorId !== user.id) return
-    if (!confirm(t('news.delete') + '?')) return
+    if (!confirm(t('news.deleteConfirm'))) return
     setDeleting(true)
     try {
       const res = await fetch(`/api/news/${id}`, { method: 'DELETE', credentials: 'include' })

@@ -66,6 +66,7 @@ export default function HorizonPage() {
 
   const handleDelete = async (id: string) => {
     if (!user) return
+    if (!confirm(t('horizon.deleteConfirm'))) return
     setDeletingId(id)
     setError(null)
     try {

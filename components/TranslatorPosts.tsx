@@ -124,6 +124,7 @@ export function TranslatorPosts({ xUser = null }: TranslatorPostsProps) {
 
   const handleDelete = async (post: ApiPost) => {
     if (!xUser || post.xUserId !== xUser.id) return
+    if (!confirm(t('translator.deleteConfirm'))) return
     try {
       const res = await fetch(`/api/translator/posts/${post.id}`, {
         method: 'DELETE',

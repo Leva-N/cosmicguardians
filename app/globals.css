@@ -64,6 +64,21 @@ html {
   background: var(--bg-primary);
   background-image: var(--bg-gradient);
   background-attachment: fixed;
+  scrollbar-width: thin;
+  scrollbar-color: #8A2BE2 transparent;
+}
+html::-webkit-scrollbar {
+  width: 8px;
+}
+html::-webkit-scrollbar-track {
+  background: transparent;
+}
+html::-webkit-scrollbar-thumb {
+  background: #8A2BE2;
+  border-radius: 4px;
+}
+html::-webkit-scrollbar-thumb:hover {
+  background: #9B4DE8;
 }
 
 body {
